@@ -5,14 +5,18 @@ const { title, link, description, tags = [] } = Astro.props;
 <div class="card">
     <div class="top-bar">
         <h2 class="card-title">{title}</h2>
-        <a href={link} target="_blank" rel="noopener noreferrer" class="github-link">View on GitHub</a>
+        <a href={link} target="_blank" rel="noopener noreferrer" class="tangled-link">View on Tangled</a>
     </div>
     <p>{description}</p>
-    {tags.length > 0 && (
-        <div class="tags">
-            {tags.map((tag: string) => <span class="tag">{tag}</span>)}
-        </div>
-    )}
+    {
+        tags.length > 0 && (
+            <div class="tags">
+                {tags.map((tag: string) => (
+                    <span class="tag">{tag}</span>
+                ))}
+            </div>
+        )
+    }
 </div>
 
 <style>
@@ -43,13 +47,13 @@ const { title, link, description, tags = [] } = Astro.props;
         font-size: 1.9em;
     }
 
-    .github-link {
+    .tangled-link {
         color: var(--black-kite);
         text-decoration: none;
         transition: color 0.1s ease-in-out;
     }
 
-    .github-link:hover {
+    .tangled-link:hover {
         color: var(--garnet);
         text-decoration: underline;
     }

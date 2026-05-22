@@ -5,38 +5,47 @@ const { title } = Astro.props;
 ---
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
+    <head>
+        <meta charset="utf-8" />
+        <link
+            rel="icon"
+            href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>"
+        />
 
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-		<script defer src="https://kit.fontawesome.com/a92da80a5c.js" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,100..900;1,100..900&display=swap"
+            rel="stylesheet"
+        />
+        <script defer src="https://kit.fontawesome.com/a92da80a5c.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
 
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta name="generator" content={Astro.generator} />
-		<meta name="description" content="Liam Pallett — Software Engineering student at the University of Sheffield." />
-		<meta property="og:title" content={title} />
-		<meta property="og:description" content="Software Engineering student & developer." />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content={Astro.generator} />
+        <meta
+            name="description"
+            content="Liam Pallett — Software Engineering student at the University of Sheffield."
+        />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content="Software Engineering student & developer." />
         <meta property="og:image" content="/og-image.png" />
         <meta property="og:type" content="website" />
 
-		<title>{title}</title>
-	</head>
-	<body>
-        <Header></Header>
-		<div class="content">
+        <title>{title}</title>
+    </head>
+    <body>
+        <Header />
+        <div class="content">
             <slot />
         </div>
-        <Footer></Footer>
-	</body>
+        <Footer />
+    </body>
 </html>
 
 <style>
     body {
-		color: var(--black-kite);
+        color: var(--black-kite);
         background-color: var(--amazon-mist);
         margin: 0;
         min-height: 100vh;

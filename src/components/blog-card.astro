@@ -1,8 +1,14 @@
 ---
-const { title, link, description, date, tags = [] } = Astro.props as {
-    title: string,
-    link: string,
-    description: string,
+const {
+    title,
+    link,
+    description,
+    date,
+    tags = [],
+} = Astro.props as {
+    title: string;
+    link: string;
+    description: string;
     date: Date;
     tags: string[];
 };
@@ -15,11 +21,15 @@ const { title, link, description, date, tags = [] } = Astro.props as {
     </div>
     <p class="description-text">{description}</p>
     <p class="date-text">{date.toLocaleDateString()}</p>
-    {tags.length > 0 && (
-        <div class="tags">
-            {tags.map((tag: string) => <span class="tag">{tag}</span>)}
-        </div>
-    )}
+    {
+        tags.length > 0 && (
+            <div class="tags">
+                {tags.map((tag: string) => (
+                    <span class="tag">{tag}</span>
+                ))}
+            </div>
+        )
+    }
 </div>
 
 <style>

@@ -1,23 +1,28 @@
 ---
-import Layout from "../layouts/layout.astro"
-import Vh from "../components/vh.astro"
+import Layout from "../layouts/layout.astro";
+import Vh from "../components/vh.astro";
 import BlogCard from "../components/blog-card.astro";
 import { getCollection } from "astro:content";
 
-const posts = (await getCollection("blog")).sort(
-    (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
-);
+const posts = (await getCollection("blog")).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 
 <Layout title="Blog">
     <Vh>
-        {posts.length > 0
-            ? posts.map(post => (
-                <BlogCard title={post.data.title} link={`/blog/${post.slug}`} date={post.data.date}
-                description={post.data.description} tags={post.data.tags}>
-                </BlogCard>
-            ))
-            : <p>No posts yet... Check back soon!</p>
+        {
+            posts.length > 0 ? (
+                posts.map((post) => (
+                    <BlogCard
+                        title={post.data.title}
+                        link={`/blog/${post.slug}`}
+                        date={post.data.date}
+                        description={post.data.description}
+                        tags={post.data.tags}
+                    ></BlogCard>
+                ))
+            ) : (
+                <p>No posts yet... Check back soon!</p>
+            )
         }
     </Vh>
 </Layout>

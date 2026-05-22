@@ -10,4 +10,4 @@ dependencies:
 
 steps:
   - name: Trigger Netlify Webhook
-    run: curl -X POST -d "{}" https://api.netlify.com/build_hooks/6a10da4e15cf240e1ac8c5ee
+    run: curl -X POST https://api.netlify.com/build_hooks/6a10da4e15cf240e1ac8c5ee

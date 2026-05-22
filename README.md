@@ -1,4 +1,4 @@
-# [liampallett.github.io](https://liampallett.github.io)
+# [liampallett.space](https://liampallett.space)
 
 Personal portfolio website and blog.
 
@@ -16,7 +16,7 @@ Personal portfolio website and blog.
 
 - Languages used: TypeScript, HTML, CSS
 - Frameworks/libraries: Astro.js
-- Deployed on GitHub Pages
+- Deployed on Netlify
 
 ---
 

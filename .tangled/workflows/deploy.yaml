@@ -1,13 +1,13 @@
-name: Netlify Deploy
+when:
+  - event: ["push"]
+    branch: ["main"]
+
 engine: nixery
 
-on:
-  push:
-    branches:
-      - main
+dependencies:
+  nixpkgs:
+    - curl
 
-jobs:
-  deploy:
-    steps:
-      - name: Trigger Netlify Webhook
-        run: curl -X POST -d "{}" https://api.netlify.com/hooks/6a10d5e0944c6f00ace3ef43
+steps:
+  - name: Trigger Netlify Webhook
+    run: curl -X POST -d "{}" https://api.netlify.com/hooks/6a10d5e0944c6f00ace3ef43

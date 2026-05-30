@@ -3,6 +3,7 @@ title: "Between a Fold and a Hard Place"
 date: 2026-05-20
 description: "How DeepMind's AlphaFold has changed my perception of AI yet again."
 tags: ["Discussion Piece", "AI", "DeepMind"]
+atUri: "at://did:plc:tgb4klpomminc5lv3clzb6wm/site.standard.document/3mn2u24sbur2h"
 ---
 
 # Between a Fold and a Hard Place

@@ -26,3 +26,5 @@ pnpm-debug.log*
 CLAUDE.md
 # Local Netlify folder
 .netlify
+
+.sequoia-state.json

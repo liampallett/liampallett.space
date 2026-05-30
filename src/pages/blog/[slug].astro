@@ -5,24 +5,30 @@ import { getCollection } from "astro:content";
 
 export async function getStaticPaths() {
     const posts = await getCollection("blog");
-    return posts.map(post => ({
+    return posts.map((post) => ({
         params: { slug: post.slug },
-        props: { post }
+        props: { post },
     }));
 }
 
 const { post } = Astro.props;
 const { Content } = await post.render();
+
+const atUri = post.data.atUri;
 ---
 
-<Layout title={post.data.title}>
+<Layout title={post.data.title} atUri={atUri}>
     <Vh>
         <div class="prose">
-            {post.data.tags.length > 0 && (
-                <div class="tags">
-                    {post.data.tags.map((tag: string) => <span class="tag">{tag}</span>)}
-                </div>
-            )}
+            {
+                post.data.tags.length > 0 && (
+                    <div class="tags">
+                        {post.data.tags.map((tag: string) => (
+                            <span class="tag">{tag}</span>
+                        ))}
+                    </div>
+                )
+            }
             <Content />
         </div>
     </Vh>

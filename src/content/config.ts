@@ -6,7 +6,10 @@ const blog = defineCollection({
         date: z.date(),
         description: z.string(),
         tags: z.array(z.string()).optional().default([]),
+
+        ogImage: z.string().optional(),
+        atUri: z.string().optional(),
     }),
 });
 
-export const collections = { blog }
+export const collections = { blog };

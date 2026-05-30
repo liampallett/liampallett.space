@@ -2,7 +2,7 @@
     "$schema": "https://tangled.org/stevedylan.dev/sequoia/raw/main/sequoia.schema.json",
     "siteUrl": "https://liampallett.space",
     "contentDir": "./src/content/blog",
-    "imagesDir": "./src/content/blog",
+    "imagesDir": "./public/blog-images",
     "outputDir": "./dist",
     "pathPrefix": "/blog",
     "publicationUri": "at://did:plc:tgb4klpomminc5lv3clzb6wm/site.standard.publication/3mn2tyfyflb27",

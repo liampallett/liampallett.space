@@ -10,7 +10,8 @@ interface Props {
 
 const { title, atUri, ogImage } = Astro.props;
 const publicationUri = "at://did:plc:tgb4klpomminc5lv3clzb6wm/site.standard.publication/3mn2tyfyflb27";
-const finalOgImage = ogImage || "/og-image.png";
+const siteUrl = "https://liampallett.space";
+const finalOgImage = ogImage ? `${siteUrl}${ogImage}` : `${siteUrl}/blog-images/default.jpg`;
 ---
 
 <html lang="en">
@@ -39,15 +40,14 @@ const finalOgImage = ogImage || "/og-image.png";
         />
         <meta property="og:title" content={title} />
         <meta property="og:description" content="Software Engineering student & developer." />
-        <meta property="og:image" content="/og-image.png" />
         <meta property="og:type" content="website" />
-
         <link rel="site.standard.publication" href={publicationUri} />
 
         {atUri && <link rel="site.standard.document" href={atUri} />}
 
         <title>{title}</title>
     </head>
+
     <body>
         <Header />
         <div class="content">
@@ -55,60 +55,60 @@ const finalOgImage = ogImage || "/og-image.png";
         </div>
         <Footer />
     </body>
-</html>
 
-<style>
-    body {
-        color: var(--black-kite);
-        background-color: var(--amazon-mist);
-        margin: 0;
-        min-height: 100vh;
-        padding-top: var(--header-height);
-    }
-
-    .content {
-        max-width: 70%;
-        margin-inline: auto;
-    }
-
-    @media screen and (max-width: 800px) {
-        .content {
-            max-width: 90%;
+    <style>
+        body {
+            color: var(--black-kite);
+            background-color: var(--amazon-mist);
+            margin: 0;
+            min-height: 100vh;
+            padding-top: var(--header-height);
         }
-    }
-</style>
 
-<style is:global>
-    * {
-        font-family: "Bitter", serif;
-    }
+        .content {
+            max-width: 70%;
+            margin-inline: auto;
+        }
 
-    :root {
-        --morning-snow: #f5f4ed;
-        --amazon-mist: #e6e4cd;
-        --black-kite: #351e1c;
-        --garnet: #733635;
-    }
+        @media screen and (max-width: 800px) {
+            .content {
+                max-width: 90%;
+            }
+        }
+    </style>
 
-    html {
-        background-color: var(--black-kite);
-    }
+    <style is:global>
+        * {
+            font-family: "Bitter", serif;
+        }
 
-    a:focus-visible {
-        outline: 2px solid var(--garnet);
-        outline-offset: 2px;
-    }
+        :root {
+            --morning-snow: #f5f4ed;
+            --amazon-mist: #e6e4cd;
+            --black-kite: #351e1c;
+            --garnet: #733635;
+        }
 
-    * {
-        scrollbar-width: none; /* Firefox */
-    }
-    *::-webkit-scrollbar {
-        display: none; /* Chrome, Safari */
-    }
+        html {
+            background-color: var(--black-kite);
+        }
 
-    /* Fix KaTeX sizing to sit naturally within your body paragraphs */
-    .katex {
-        font-size: 0.9em !important; /* Slightly downsizes the math text */
-        letter-spacing: normal;
-    }
-</style>
+        a:focus-visible {
+            outline: 2px solid var(--garnet);
+            outline-offset: 2px;
+        }
+
+        * {
+            scrollbar-width: none; /* Firefox */
+        }
+        *::-webkit-scrollbar {
+            display: none; /* Chrome, Safari */
+        }
+
+        /* Fix KaTeX sizing to sit naturally within your body paragraphs */
+        .katex {
+            font-size: 0.9em !important; /* Slightly downsizes the math text */
+            letter-spacing: normal;
+        }
+    </style>
+</html>

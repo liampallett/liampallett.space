@@ -1,16 +1,18 @@
 {
-  "$schema": "https://tangled.org/stevedylan.dev/sequoia/raw/main/sequoia.schema.json",
-  "siteUrl": "https://liampallett.space",
-  "contentDir": "./src/content/blog",
-  "outputDir": "./dist",
-  "pathPrefix": "/blog",
-  "publicationUri": "at://did:plc:tgb4klpomminc5lv3clzb6wm/site.standard.publication/3mn2tyfyflb27",
-  "pdsUrl": "https://gomphus.us-west.host.bsky.network",
-  "frontmatter": {
-    "publishDate": "date"
-  },
-  "publishContent": true,
-  "bluesky": {
-    "enabled": true
-  }
+    "$schema": "https://tangled.org/stevedylan.dev/sequoia/raw/main/sequoia.schema.json",
+    "siteUrl": "https://liampallett.space",
+    "contentDir": "./src/content/blog",
+    "imagesDir": "./src/content/blog",
+    "outputDir": "./dist",
+    "pathPrefix": "/blog",
+    "publicationUri": "at://did:plc:tgb4klpomminc5lv3clzb6wm/site.standard.publication/3mn2tyfyflb27",
+    "pdsUrl": "https://gomphus.us-west.host.bsky.network",
+    "frontmatter": {
+        "publishDate": "date",
+        "coverImage": "ogImage"
+    },
+    "publishContent": true,
+    "bluesky": {
+        "enabled": true
+    }
 }

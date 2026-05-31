@@ -1,11 +1,24 @@
-import { getCollection } from "astro:content"; // Note: If your script engine struggles to pull content here, we can switch to standard fs reading
 import { StandardSitePublisher } from "@bryanguffey/astro-standard-site";
 import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
-import matter from "gray-matter"; // Run 'npm install gray-matter' if not already present
+import matter from "gray-matter";
 
 dotenv.config();
+
+// Helper to recursively find all markdown files (handles nested slug folders cleanly)
+function getMarkdownFiles(dir: string, fileList: string[] = []): string[] {
+    const files = fs.readdirSync(dir);
+    files.forEach((file) => {
+        const filePath = path.join(dir, file);
+        if (fs.statSync(filePath).isDirectory()) {
+            fileList = getMarkdownFiles(filePath, fileList);
+        } else if (file.endsWith(".md") || file.endsWith(".mdx")) {
+            fileList.push(filePath);
+        }
+    });
+    return fileList;
+}
 
 async function syncAllPosts() {
     if (!process.env.ATPROTO_APP_PASSWORD) {
@@ -14,30 +27,30 @@ async function syncAllPosts() {
     }
 
     const publisher = new StandardSitePublisher({
-        handle: "liampallett.space",
-        appPassword: process.env.ATPROTO_APP_PASSWORD,
+        identifier: "liampallett.space",
+        password: process.env.ATPROTO_APP_PASSWORD,
     });
 
-    console.log("📨 Connecting to Personal Data Server (PDS)...");
+    console.log("📨 Connecting to PDS...");
     await publisher.login();
 
-    // Scan your content directory directly
     const blogDir = path.resolve("./src/content/blog");
-    const files = fs.readdirSync(blogDir).filter((file) => file.endsWith(".md") || file.endsWith(".mdx"));
+    const markdownFiles = getMarkdownFiles(blogDir);
 
-    for (const file of files) {
-        const filePath = path.join(blogDir, file);
+    for (const filePath of markdownFiles) {
         const fileContent = fs.readFileSync(filePath, "utf-8");
         const { data, content } = matter(fileContent);
-        const slug = file.replace(/\.mdx?$/, "");
 
-        console.log(`🚀 Synchronizing record structure for: /blog/${slug}`);
+        // Derive the slug cleanly from either the filename or folder name
+        const fileParsed = path.parse(filePath);
+        const slug = fileParsed.name === "index" ? path.basename(fileParsed.dir) : fileParsed.name;
+
+        console.log(`🚀 Synchronizing PDS record schema for: /blog/${slug}`);
 
         try {
-            // Force the PDS engine to register the record utilizing our strict deterministic rkey configuration rules!
             await publisher.publishDocument({
                 site: "at://did:plc:tgb4klpomminc5lv3clzb6wm/site.standard.publication/3mn5k67ewiz25",
-                title: data.title,
+                title: data.title || "Untitled Post",
                 description: data.description || "Software Engineering student & developer.",
                 publishedAt: data.date ? new Date(data.date).toISOString() : new Date().toISOString(),
                 path: `/blog/${slug}/`,
@@ -48,14 +61,13 @@ async function syncAllPosts() {
                 },
                 textContent: content.replace(/[#*`_\-]/g, ""),
                 tags: data.tags || [],
-                // This critical parameter binds the data registry perfectly to match our layout configuration file link output elements
-                rkey: slug,
+                rkey: slug, // Matches the template's fallback string exactly!
             });
         } catch (err) {
-            console.error(`❌ Failed tracking sync execution for ${slug}:`, err);
+            console.error(`❌ Failed sync for ${slug}:`, err);
         }
     }
-    console.log("✅ All repository assets have completed syncing smoothly with the ATProto firehose.");
+    console.log("✅ PDS firehose sync complete.");
 }
 
 syncAllPosts();

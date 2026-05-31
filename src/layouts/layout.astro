@@ -10,14 +10,12 @@ interface Props {
 
 const { title, atUri, ogImage } = Astro.props;
 const publicationUri = "at://did:plc:tgb4klpomminc5lv3clzb6wm/site.standard.publication/3mn3vfwo6wm24";
-const siteUrl = "https://liampallett.space";
-const finalOgImage = ogImage ? `${siteUrl}${ogImage}` : `${siteUrl}/blog-images/default.jpg`;
 ---
 
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <meta property="og:image" content={finalOgImage} />
+        <!-- <meta property="og:image" content={} /> -->
         <link
             rel="icon"
             href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>"

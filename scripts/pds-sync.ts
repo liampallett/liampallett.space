@@ -6,7 +6,6 @@ import matter from "gray-matter";
 
 dotenv.config();
 
-// Helper to recursively find all markdown files (handles nested slug folders cleanly)
 function getMarkdownFiles(dir: string, fileList: string[] = []): string[] {
     const files = fs.readdirSync(dir);
     files.forEach((file) => {
@@ -28,10 +27,10 @@ async function syncAllPosts() {
 
     const publisher = new StandardSitePublisher({
         identifier: "liampallett.space",
-        password: process.env.ATPROTO_APP_PASSWORD,
+        password: process.env.ATPROTO_APP_PASSWORD || "",
     });
 
-    console.log("📨 Connecting to PDS...");
+    console.log("📨 Connecting to PDS... ");
     await publisher.login();
 
     const blogDir = path.resolve("./src/content/blog");
@@ -41,11 +40,13 @@ async function syncAllPosts() {
         const fileContent = fs.readFileSync(filePath, "utf-8");
         const { data, content } = matter(fileContent);
 
-        // Derive the slug cleanly from either the filename or folder name
         const fileParsed = path.parse(filePath);
         const slug = fileParsed.name === "index" ? path.basename(fileParsed.dir) : fileParsed.name;
 
         console.log(`🚀 Synchronizing PDS record schema for: /blog/${slug}`);
+
+        // Record keys cannot contain slashes or complex routes, so appending a clean index modifier ensures strict matching
+        const cleanRecordKey = `${slug}-index`;
 
         try {
             await publisher.publishDocument({
@@ -61,7 +62,7 @@ async function syncAllPosts() {
                 },
                 textContent: content.replace(/[#*`_\-]/g, ""),
                 tags: data.tags || [],
-                rkey: `${slug}-index, // Matches the template's fallback string exactly!
+                rkey: cleanRecordKey,
             });
         } catch (err) {
             console.error(`❌ Failed sync for ${slug}:`, err);

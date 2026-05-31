@@ -13,11 +13,9 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await post.render();
-
-const fallbackAtUri = post.data.atUri;
 ---
 
-<Layout title={post.data.title} atUri={atUri} ogImage={post.data.ogImage}>
+<Layout title={post.data.title} atUri={post.data.atUri} ogImage={post.data.ogImage}>
     <Vh>
         <div class="prose">
             {

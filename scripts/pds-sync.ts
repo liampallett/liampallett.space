@@ -61,7 +61,7 @@ async function syncAllPosts() {
                 },
                 textContent: content.replace(/[#*`_\-]/g, ""),
                 tags: data.tags || [],
-                rkey: slug, // Matches the template's fallback string exactly!
+                rkey: `${slug}-index, // Matches the template's fallback string exactly!
             });
         } catch (err) {
             console.error(`❌ Failed sync for ${slug}:`, err);

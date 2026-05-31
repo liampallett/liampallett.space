@@ -15,7 +15,12 @@ const publicationUri = "at://did:plc:tgb4klpomminc5lv3clzb6wm/site.standard.publ
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <!-- <meta property="og:image" content={} /> -->
+        <meta
+            property="og:image"
+            content={ogImage
+                ? `https://liampallett.space${ogImage}`
+                : `https://liampallett.space/blog-images/default.jpg`}
+        />
         <link
             rel="icon"
             href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>"

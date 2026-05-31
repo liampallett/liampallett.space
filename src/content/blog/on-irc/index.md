@@ -3,7 +3,7 @@ title: "On IRC"
 date: 2026-05-05
 description: "Discussing the history of IRC and its use in 2026"
 tags: ["IRC", "Golang"]
-atUri: "at://did:plc:tgb4klpomminc5lv3clzb6wm/site.standard.document/3mn2u252wud2h"
+atUri: "at://did:plc:tgb4klpomminc5lv3clzb6wm/site.standard.document/3mn5m2mgqn2ie"
 ---
 
 # On IRC

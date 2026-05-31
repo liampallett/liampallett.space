@@ -3,7 +3,7 @@ title: "NSSC Day 2"
 date: 2026-03-15
 description: "Look back on the second day of the NSSC and the weekend as a whole."
 tags: ["NSSC 2026", "Conference"]
-atUri: "at://did:plc:tgb4klpomminc5lv3clzb6wm/site.standard.document/3mn2u25nhs62d"
+atUri: "at://did:plc:tgb4klpomminc5lv3clzb6wm/site.standard.document/3mn5m2m74ikjv"
 ---
 
 # NSSC Day 2 and the weekend as a whole

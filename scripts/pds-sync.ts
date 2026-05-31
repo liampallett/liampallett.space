@@ -45,9 +45,6 @@ async function syncAllPosts() {
 
         console.log(`🚀 Synchronizing PDS record schema for: /blog/${slug}`);
 
-        // Record keys cannot contain slashes or complex routes, so appending a clean index modifier ensures strict matching
-        const cleanRecordKey = `${slug}-index`;
-
         try {
             await publisher.publishDocument({
                 site: "at://did:plc:tgb4klpomminc5lv3clzb6wm/site.standard.publication/3mn5k67ewiz25",
@@ -62,7 +59,6 @@ async function syncAllPosts() {
                 },
                 textContent: content.replace(/[#*`_\-]/g, ""),
                 tags: data.tags || [],
-                rkey: cleanRecordKey,
             });
         } catch (err) {
             console.error(`❌ Failed sync for ${slug}:`, err);

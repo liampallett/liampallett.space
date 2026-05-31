@@ -14,7 +14,7 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await post.render();
 
-const fallbackAtUri = `at://did:plc:tgb4klpomminc5lv3clzb6wm/site.standard.document/${post.slug}-index`;
+const fallbackAtUri = `at://did:plc:tgb4klpomminc5lv3clzb6wm/site.standard.document/${post.slug}/`;
 ---
 
 <Layout title={post.data.title} atUri={fallbackAtUri} ogImage={post.data.ogImage}>

@@ -15,12 +15,11 @@ const {
 ---
 
 <div class="card">
-    <div class="top-bar">
-        <h2 class="card-title">{title}</h2>
-        <a href={link} class="view-link">View Post</a>
-    </div>
-    <p class="description-text">{description}</p>
-    <p class="date-text">{date.toLocaleDateString()}</p>
+    <h2 class="card-title">
+        <a href={link} class="link">{title} </a>
+    </h2>
+    <p>{description}</p>
+    <p>{date.toLocaleDateString()}</p>
     {
         tags.length > 0 && (
             <div class="tags">
@@ -39,41 +38,24 @@ const {
         text-align: left;
     }
 
-    .top-bar {
-        display: flex;
-        align-items: flex-start;
-    }
-
-    .top-bar .card-title {
+    .card-title {
         font-size: 2.5em;
         margin-top: 0;
         margin-bottom: 0;
     }
 
-    .top-bar a {
-        font-size: 2.5em;
-        margin-left: auto;
-    }
-
-    .card .description-text {
+    .card p {
         margin: 0;
         font-size: 1.9em;
     }
 
-    .view-link {
+    .link {
         color: var(--black-kite);
         text-decoration: none;
         transition: color 0.1s ease-in-out;
     }
 
-    .view-link:hover {
-        color: var(--garnet);
-        text-decoration: underline;
-    }
-
-    .date-text {
-        margin: 0;
-        font-size: 1.4em;
+    .link:hover {
         color: var(--garnet);
     }
 
@@ -90,20 +72,5 @@ const {
         font-size: 0.9em;
         padding: 0.2em 0.6em;
         border-radius: 4px;
-    }
-
-    @media screen and (max-width: 800px) {
-        .top-bar {
-            flex-direction: column;
-        }
-
-        .top-bar a {
-            margin-left: 0;
-            margin-top: 0.5em;
-        }
-
-        .tags {
-            justify-content: center;
-        }
     }
 </style>

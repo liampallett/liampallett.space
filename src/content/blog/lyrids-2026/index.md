@@ -1,7 +1,7 @@
 ---
 title: "SSI Lyrids Meteor Shower Trip"
 date: 2026-04-23
-description: "Look back on the second day of the NSSC and the weekend as a whole."
+description: "Come meteor hunting with me and the Sheffield Space Initiative!"
 tags: ["Astrophotography", "SSI"]
 atUri: "at://did:plc:tgb4klpomminc5lv3clzb6wm/site.standard.document/3mn5m2lpnesqq"
 ---

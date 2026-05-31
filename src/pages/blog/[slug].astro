@@ -17,6 +17,7 @@ const { Content } = await post.render();
 
 let atUri: string | undefined = undefined;
 
+// This will now execute correctly on Netlify!
 if (process.env.ATPROTO_APP_PASSWORD) {
     try {
         const publisher = new StandardSitePublisher({
@@ -27,7 +28,6 @@ if (process.env.ATPROTO_APP_PASSWORD) {
         await publisher.login();
 
         const result = await publisher.publishDocument({
-            // ✅ Change this line to your absolute layout collection URI
             site: "at://did:plc:tgb4klpomminc5lv3clzb6wm/site.standard.publication/3mn2tyfyflb27",
             title: post.data.title,
             description: post.data.description,

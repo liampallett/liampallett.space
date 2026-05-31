@@ -2,6 +2,7 @@
 import Layout from "../../layouts/layout.astro";
 import Vh from "../../components/vh.astro";
 import { getCollection } from "astro:content";
+import { StandardSitePublisher } from "@bryanguffey/astro-standard-site";
 
 export async function getStaticPaths() {
     const posts = await getCollection("blog");
@@ -14,11 +15,41 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await post.render();
 
-const atUri = post.data.atUri;
-const ogImage = post.data.ogImage;
+let atUri: string | undefined = undefined;
+
+if (process.env.ATPROTO_APP_PASSWORD) {
+    try {
+        const publisher = new StandardSitePublisher({
+            handle: "liampallett.space",
+            appPassword: process.env.ATPROTO_APP_PASSWORD,
+        });
+
+        await publisher.login();
+
+        const result = await publisher.publishDocument({
+            // ✅ Change this line to your absolute layout collection URI
+            site: "at://did:plc:tgb4klpomminc5lv3clzb6wm/site.standard.publication/3mn2tyfyflb27",
+            title: post.data.title,
+            description: post.data.description,
+            publishedAt: post.data.date.toISOString(),
+            path: `/blog/${post.slug}/`,
+            content: {
+                $type: "site.standard.content.markdown",
+                text: post.body,
+                version: "1.0",
+            },
+            textContent: post.body.replace(/[#*`_\-]/g, ""),
+            tags: post.data.tags || [],
+        });
+
+        atUri = result.uri;
+    } catch (error) {
+        console.error("⚠️ ATProto dynamic ingestion failed:", error);
+    }
+}
 ---
 
-<Layout title={post.data.title} atUri={atUri} ogImage={ogImage}>
+<Layout title={post.data.title} atUri={atUri} ogImage={post.data.ogImage}>
     <Vh>
         <div class="prose">
             {

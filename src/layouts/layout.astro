@@ -28,7 +28,7 @@ const publicationUri = "at://did:plc:tgb4klpomminc5lv3clzb6wm/site.standard.publ
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
-            href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+            href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
             rel="stylesheet"
         />
         <script defer src="https://kit.fontawesome.com/a92da80a5c.js" crossorigin="anonymous"></script>
@@ -62,8 +62,8 @@ const publicationUri = "at://did:plc:tgb4klpomminc5lv3clzb6wm/site.standard.publ
 
     <style>
         body {
-            color: var(--black-kite);
-            background-color: var(--amazon-mist);
+            color: var(--text);
+            background-color: var(--bg);
             margin: 0;
             min-height: 100vh;
             padding-top: var(--header-height);
@@ -83,23 +83,20 @@ const publicationUri = "at://did:plc:tgb4klpomminc5lv3clzb6wm/site.standard.publ
 
     <style is:global>
         * {
-            font-family: "PT Serif", serif;
+            font-family: "IBM Plex Mono", monospace;
         }
 
         :root {
-            --morning-snow: #f5f4ed;
-            --amazon-mist: #e6e4cd;
-            --black-kite: #351e1c;
-            --garnet: #733635;
+            --bg: #f0efed;
+            --bg-subtle: #e8e7e4;
+            --text: #1a1a1a;
+            --text-muted: #6b6b6b;
+            --accent: #4a5568;
+            --border: #d4d3d0;
         }
 
         html {
-            background-color: var(--black-kite);
-        }
-
-        a:focus-visible {
-            outline: 2px solid var(--garnet);
-            outline-offset: 2px;
+            background-color: var(--bg);
         }
 
         * {

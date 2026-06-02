@@ -1,0 +1,28 @@
+---
+import Layout from "../../layouts/layout.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+    const notes = await getCollection("garden");
+
+    return notes.map((note) => ({
+        params: { slug: note.slug },
+        props: { entry: note },
+    }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+
+export const prerender = true;
+---
+
+<Layout title={entry.data.title}>
+    <article>
+        <div class="banner">🌱 This is a garden note. It's unfinished and may change over time.</div>
+
+        <h1>{entry.data.title}</h1>
+
+        <Content />
+    </article>
+</Layout>

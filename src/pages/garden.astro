@@ -1,0 +1,111 @@
+---
+import Layout from "../layouts/layout.astro";
+import { getCollection } from "astro:content";
+
+const notes = (await getCollection("garden")).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const grouped = Object.groupBy(notes, (note) => `${note.data.date.getFullYear()}`);
+
+const sortedYears = Object.entries(grouped).sort(([a], [b]) => Number(b) - Number(a));
+---
+
+<Layout title="garden">
+    <div class="page">
+        <h1>garden</h1>
+
+        <p class="intro">
+            Notes, ideas, half-finished thoughts, and things I'm still figuring out. These are works in progress and may
+            change over time.
+        </p>
+
+        {
+            sortedYears.map(([year, notes]) => (
+                <section>
+                    <h2>{year}</h2>
+
+                    <ul>
+                        {notes?.map((note) => (
+                            <li>
+                                <span class="date">
+                                    {note.data.date
+                                        .toLocaleDateString("en-GB", {
+                                            day: "numeric",
+                                            month: "short",
+                                        })
+                                        .toLowerCase()}
+                                </span>
+
+                                <div>
+                                    <a href={`/garden/${note.slug}`}>🌱 {note.data.title}</a>
+
+                                    <p>{note.data.description}</p>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                </section>
+            ))
+        }
+    </div>
+</Layout>
+
+<style>
+    .page {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 3rem 1.5rem;
+    }
+
+    .intro {
+        color: var(--text-muted);
+        margin-bottom: 3rem;
+    }
+
+    section {
+        margin-bottom: 3rem;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    li {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .date {
+        width: 4.5rem;
+        flex-shrink: 0;
+        opacity: 0.6;
+    }
+
+    a {
+        color: var(--text);
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    p {
+        margin: 0.25rem 0 0;
+        opacity: 0.7;
+    }
+
+    @media (max-width: 768px) {
+        li {
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .date {
+            width: auto;
+        }
+    }
+</style>

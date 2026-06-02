@@ -1,72 +1,183 @@
 ---
 import Layout from "../layouts/layout.astro";
-import Vh from "../components/vh.astro";
-import ProjectCard from "../components/project-card.astro";
+import Card from "../components/card.astro";
+
+import { getCollection } from "astro:content";
+
+const projects = (await getCollection("projects")).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const groupedProjects = Object.groupBy(projects, (project) => project.data.date.getFullYear());
 ---
 
-<Layout title="Projects">
-    <Vh>
-        <ProjectCard
-            title="glirc (2026)"
-            link="https://tangled.org/liampallett.space/glirc"
-            description="glirc is a CLI-based IRC client written in Go."
-            tags={["Golang", "IRC", "Socket Programming"]}
-        />
+<Layout title="projects">
+    <div class="projects-layout">
+        <aside class="sidebar">
+            {
+                Object.entries(groupedProjects)
+                    .sort(([a], [b]) => Number(b) - Number(a))
+                    .map(([year, projects]) => (
+                        <Fragment>
+                            <h3>{year}</h3>
 
-        <ProjectCard
-            title="Investigating Star Tracking Algorithms (2026)"
-            link="https://tangled.org/liampallett.space/investigating-star-tracking-algorithms"
-            description="Machine learning algorithm to identify real and fake stars within a satellite sensor view based on published research."
-            tags={["Python", "Machine Learning", "Aerospace Applications", "Satellite Systems"]}
-        />
+                            {projects?.map((project) => (
+                                <a href={`#${project.slug}`} data-project-link={project.slug}>
+                                    <span class="month">
+                                        {project.data.date
+                                            .toLocaleDateString("en-GB", { month: "short" })
+                                            .toLowerCase()}
+                                    </span>
 
-        <ProjectCard
-            title="ISS Pass Bot (2026)"
-            link="https://tangled.org/liampallett.space/iss-bluesky-bot"
-            description="Bluesky bot that calculates ISS passes over Sheffield, UK."
-            tags={["Python", "Celestrak API", "AT Proto", "Orbit Propagation"]}
-        />
+                                    {project.data.title}
+                                </a>
+                            ))}
+                        </Fragment>
+                    ))
+            }
+        </aside>
 
-        <ProjectCard
-            title="Orbit Simulation (2026)"
-            link="https://tangled.org/liampallett.space/orbit-simulation"
-            description="Simple 2D orbit simulator written in Python."
-            tags={["Python", "Orbital Mechanics", "Simulation"]}
-        />
-
-        <ProjectCard
-            title="Flight Dynamics (2026)"
-            link="https://tangled.org/liampallett.space/flight-dynamics"
-            description="Flight dynamics simulator written in Python. Simulate complex multi-stage rockets with different propellant and engine configuration."
-            tags={["Python", "Isentropic Flow", "Simulation", "Rocketry"]}
-        />
-
-        <ProjectCard
-            title="Satellite Visualiser (2026)"
-            link="https://tangled.org/liampallett.space/satellite-visualiser"
-            description="Visualise the live orbits of Earth's satellites and space stations."
-            tags={["Python", "Celestrak API", "Keplerian Motion"]}
-        />
-
-        <ProjectCard
-            title="Physics Engine (2026)"
-            link="https://tangled.org/liampallett.space/physics-engine"
-            description="Custom physics engine with Vector2D implementation."
-            tags={["C++", "Physics Engine", "Simulation"]}
-        />
-
-        <ProjectCard
-            title="Open-TTP (2026)"
-            link="https://tangled.org/liampallett.space/open-ttp"
-            description="A simple C++ program for simulating and decoding 64-byte packed binary telemetry data with integrity validation."
-            tags={["C++", "Telemetry", "Protocol Design", "Binary Frames"]}
-        />
-
-        <ProjectCard
-            title="Personal/Portfolio Website (2025)"
-            link="https://tangled.org/liampallett.space/liampallett.space"
-            description="Personal portfolio page built in Astro and deployed via custom CI/CD pipeline and Netlify webhooks."
-            tags={["Astro", "TypeScript", "CSS"]}
-        />
-    </Vh>
+        <main class="projects-content">
+            {
+                projects.map((project) => (
+                    <section id={project.slug}>
+                        <Card
+                            title={project.data.title}
+                            link={project.data.link}
+                            description={project.data.description}
+                            tags={project.data.tags}
+                        />
+                    </section>
+                ))
+            }
+        </main>
+    </div>
 </Layout>
+
+<style>
+    .projects-content section {
+        scroll-margin-top: calc(var(--header-height) + 1rem);
+    }
+
+    .projects-layout {
+        display: grid;
+        grid-template-columns: 250px minmax(0, 700px);
+        gap: 5rem;
+
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+
+        align-items: start;
+    }
+
+    .sidebar {
+        position: sticky;
+        top: 6rem;
+
+        padding-right: 2rem;
+        border-right: 1px dashed var(--border);
+
+        display: flex;
+        flex-direction: column;
+    }
+
+    .sidebar h3 {
+        margin: 1.5rem 0 0.5rem;
+        font-size: 1rem;
+        font-weight: normal;
+        color: var(--text);
+    }
+
+    .sidebar h3:first-child {
+        margin-top: 0;
+    }
+
+    .sidebar a {
+        display: flex;
+        gap: 0.5rem;
+        align-items: baseline;
+
+        color: var(--text-muted);
+        text-decoration: none;
+        margin-bottom: 0.35rem;
+        font-size: 0.95rem;
+
+        transition:
+            color 0.15s ease,
+            transform 0.15s ease;
+    }
+
+    .sidebar .month {
+        flex-shrink: 0;
+        opacity: 0.6;
+        width: 2.5rem;
+    }
+
+    .sidebar a:hover {
+        color: var(--text);
+    }
+
+    .sidebar a {
+        border-left: 2px solid transparent;
+        padding-left: 0.5rem;
+    }
+
+    .sidebar a.active {
+        color: var(--text);
+        border-left-color: var(--text);
+    }
+
+    @media (max-width: 768px) {
+        .projects-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .sidebar {
+            display: none;
+        }
+    }
+</style>
+
+<script>
+    const offset = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--header-height")) + 24;
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const sections = [...document.querySelectorAll(".projects-content section")];
+        const links = [...document.querySelectorAll("[data-project-link]")];
+
+        if (!sections.length || !links.length) return;
+
+        links.forEach((link) => {
+            link.addEventListener("click", () => {
+                setActiveLink(link.dataset.projectLink);
+            });
+        });
+
+        const setActiveLink = (id) => {
+            links.forEach((link) => {
+                link.classList.toggle("active", link.dataset.projectLink === id);
+            });
+        };
+
+        const updateActiveLink = () => {
+            let currentSection = sections[0];
+
+            for (const section of sections) {
+                const rect = section.getBoundingClientRect();
+
+                if (rect.top <= offset) {
+                    currentSection = section;
+                } else {
+                    break;
+                }
+            }
+
+            setActiveLink(currentSection.id);
+        };
+
+        window.addEventListener("scroll", updateActiveLink, {
+            passive: true,
+        });
+
+        updateActiveLink();
+    });
+</script>

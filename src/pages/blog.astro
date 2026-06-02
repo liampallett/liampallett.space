@@ -1,28 +1,180 @@
 ---
 import Layout from "../layouts/layout.astro";
-import Vh from "../components/vh.astro";
-import BlogCard from "../components/blog-card.astro";
 import { getCollection } from "astro:content";
 
 const posts = (await getCollection("blog")).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const grouped = Object.groupBy(posts, (post) => `${post.data.date.getFullYear()}`);
+
+const years = Object.keys(grouped);
+const showSidebar = years.length > 1;
+
+const sortedYears = Object.entries(grouped).sort(([a], [b]) => Number(b) - Number(a));
 ---
 
-<Layout title="Blog">
-    <Vh>
+<Layout title="blog">
+    <div class:list={["archive-layout", { compact: !showSidebar }]}>
         {
-            posts.length > 0 ? (
-                posts.map((post) => (
-                    <BlogCard
-                        title={post.data.title}
-                        link={`/blog/${post.slug}`}
-                        date={post.data.date}
-                        description={post.data.description}
-                        tags={post.data.tags}
-                    ></BlogCard>
-                ))
-            ) : (
-                <p>No posts yet... Check back soon!</p>
+            showSidebar && (
+                <aside class="sidebar">
+                    {sortedYears.map(([year]) => (
+                        <a href={`#${year}`}>{year}</a>
+                    ))}
+                </aside>
             )
         }
-    </Vh>
+
+        <main class="archive-content">
+            {
+                sortedYears.map(([year, yearPosts]) => (
+                    <section id={year}>
+                        <h2>{year}</h2>
+
+                        <ul>
+                            {yearPosts?.map((post) => (
+                                <li>
+                                    <span class="date">
+                                        {post.data.date
+                                            .toLocaleDateString("en-GB", {
+                                                day: "numeric",
+                                                month: "short",
+                                            })
+                                            .toLowerCase()}
+                                    </span>
+
+                                    <div>
+                                        <a href={`/blog/${post.slug}`}>{post.data.title}</a>
+
+                                        <p>{post.data.description}</p>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    </section>
+                ))
+            }
+        </main>
+    </div>
 </Layout>
+
+<style>
+    .archive-layout {
+        display: grid;
+        grid-template-columns: 120px minmax(0, 700px);
+        gap: 5rem;
+
+        max-width: 900px;
+        min-height: calc(100vh - var(--header-height));
+        margin: 0 auto;
+        padding: 0 1.5rem;
+        box-sizing: border-box;
+    }
+
+    @media (max-width: 768px) {
+        .archive-layout {
+            padding: 0 1rem;
+            box-sizing: border-box;
+        }
+
+        .archive-content li {
+            flex-direction: column;
+            gap: 0.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .date {
+            width: auto;
+            font-size: 0.9rem;
+        }
+    }
+
+    .archive-layout.compact {
+        grid-template-columns: minmax(0, 700px);
+        max-width: 700px;
+    }
+
+    .sidebar {
+        position: sticky;
+        top: 6rem;
+
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        padding-right: 2rem;
+        border-right: 1px dashed var(--border);
+    }
+
+    .sidebar a {
+        text-decoration: none;
+        color: var(--text-muted);
+    }
+
+    .sidebar a:hover {
+        color: var(--text);
+    }
+
+    .archive-content section {
+        margin-bottom: 3rem;
+    }
+
+    .archive-content h2 {
+        margin: 0 0 1.25rem;
+    }
+
+    .archive-content ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .archive-content li {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .date {
+        width: 4.5rem;
+        flex-shrink: 0;
+        opacity: 0.6;
+    }
+
+    .archive-content a {
+        color: var(--text);
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .archive-content a:hover {
+        text-decoration: underline;
+    }
+
+    .archive-content p {
+        margin: 0.15rem 0 0.75rem;
+        opacity: 0.7;
+        max-width: 60ch;
+    }
+
+    @media (max-width: 768px) {
+        .archive-layout {
+            grid-template-columns: 1fr;
+            padding: 0 1rem;
+        }
+
+        .sidebar {
+            display: none;
+        }
+
+        .archive-content li {
+            flex-direction: column;
+            gap: 0.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .date {
+            width: auto;
+            font-size: 0.9rem;
+        }
+    }
+</style>

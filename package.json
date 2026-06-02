@@ -10,10 +10,11 @@
     },
     "dependencies": {
         "@astrojs/rss": "^4.0.18",
-        "@atproto/api": "^0.20.7",
+        "@atproto/api": "^0.20.8",
         "@bryanguffey/astro-standard-site": "^1.0.3",
         "astro": "^5.17.1",
         "dotenv": "^17.4.2",
+        "fast-xml-parser": "^5.8.0",
         "gray-matter": "^4.0.3",
         "rehype-katex": "^7.0.1",
         "remark-math": "^6.0.0"

@@ -1,0 +1,56 @@
+---
+const { title, link, description, date, tags = [], external = false } = Astro.props;
+---
+
+<div class="card">
+    <h2 class="card-title">
+        <a
+            href={link}
+            class="link"
+            target={external ? "_blank" : undefined}
+            rel={external ? "noopener noreferrer" : undefined}>{title}</a
+        >
+    </h2>
+    <p>{description}</p>
+    {date && <p class="date">{date.toLocaleDateString()}</p>}
+    {
+        tags.length > 0 && (
+            <p class="tags">
+                <span>tags:</span>
+                {tags.join(", ")}
+            </p>
+        )
+    }
+</div>
+
+<style>
+    .card {
+        margin-bottom: 2.5em;
+        text-align: left;
+    }
+
+    .card-title {
+        font-size: 1.2em;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    .card p {
+        margin: 0;
+        font-size: 1em;
+    }
+
+    .link {
+        color: var(--text);
+        transition: color 0.1s ease-in-out;
+    }
+
+    .link:hover {
+        color: var(--text-muted);
+    }
+
+    .tags {
+        margin-top: 0.75em;
+        font-size: 0.9em;
+    }
+</style>

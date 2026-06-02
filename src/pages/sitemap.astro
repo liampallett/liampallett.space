@@ -1,0 +1,82 @@
+---
+import Layout from "../layouts/layout.astro";
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("blog")).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const projects = (await getCollection("projects")).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const pages = [
+    { href: "/", title: "home" },
+    { href: "/now", title: "now" },
+    { href: "/projects", title: "projects" },
+    { href: "/blog", title: "blog" },
+];
+---
+
+<Layout title="sitemap">
+    <div class="page">
+        <h1>sitemap</h1>
+
+        <h2>pages</h2>
+
+        <ul>
+            {
+                pages.map((page) => (
+                    <li>
+                        <a href={page.href}>{page.title}</a>
+                    </li>
+                ))
+            }
+        </ul>
+
+        <h2>projects</h2>
+
+        <ul>
+            {
+                projects.map((project) => (
+                    <li>
+                        <a href={`/projects#${project.slug}`}>{project.data.title}</a>
+                    </li>
+                ))
+            }
+        </ul>
+
+        <h2>blog posts</h2>
+
+        <ul>
+            {
+                posts.map((post) => (
+                    <li>
+                        <a href={`/blog/${post.slug}`}>{post.data.title}</a>
+                    </li>
+                ))
+            }
+        </ul>
+    </div>
+</Layout>
+
+<style>
+    .page {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 3rem 1.5rem;
+    }
+
+    pre {
+        line-height: 1.8;
+        overflow-x: auto;
+    }
+
+    ul {
+        padding-left: 1.25rem;
+    }
+
+    li {
+        margin-bottom: 0.5rem;
+    }
+
+    a {
+        color: var(--text);
+    }
+</style>

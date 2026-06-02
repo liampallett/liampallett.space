@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/layout.astro";
+import Vh from "../components/vh.astro";
 import { getCollection } from "astro:content";
 
 const notes = (await getCollection("garden")).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
@@ -10,43 +11,45 @@ const sortedYears = Object.entries(grouped).sort(([a], [b]) => Number(b) - Numbe
 ---
 
 <Layout title="garden">
-    <div class="page">
-        <h1>garden</h1>
+    <Vh>
+        <div class="page">
+            <h1>garden</h1>
 
-        <p class="intro">
-            Notes, ideas, half-finished thoughts, and things I'm still figuring out. These are works in progress and may
-            change over time.
-        </p>
+            <p class="intro">
+                Notes, ideas, half-finished thoughts, and things I'm still figuring out. These are works in progress and
+                may change over time.
+            </p>
 
-        {
-            sortedYears.map(([year, notes]) => (
-                <section>
-                    <h2>{year}</h2>
+            {
+                sortedYears.map(([year, notes]) => (
+                    <section>
+                        <h2>{year}</h2>
 
-                    <ul>
-                        {notes?.map((note) => (
-                            <li>
-                                <span class="date">
-                                    {note.data.date
-                                        .toLocaleDateString("en-GB", {
-                                            day: "numeric",
-                                            month: "short",
-                                        })
-                                        .toLowerCase()}
-                                </span>
+                        <ul>
+                            {notes?.map((note) => (
+                                <li>
+                                    <span class="date">
+                                        {note.data.date
+                                            .toLocaleDateString("en-GB", {
+                                                day: "numeric",
+                                                month: "short",
+                                            })
+                                            .toLowerCase()}
+                                    </span>
 
-                                <div>
-                                    <a href={`/garden/${note.slug}`}>🌱 {note.data.title}</a>
+                                    <div>
+                                        <a href={`/garden/${note.slug}`}>🌱 {note.data.title}</a>
 
-                                    <p>{note.data.description}</p>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-                </section>
-            ))
-        }
-    </div>
+                                        <p>{note.data.description}</p>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    </section>
+                ))
+            }
+        </div>
+    </Vh>
 </Layout>
 
 <style>

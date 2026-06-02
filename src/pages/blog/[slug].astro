@@ -1,4 +1,5 @@
 ---
+import "../../styles/prose.css";
 import Layout from "../../layouts/layout.astro";
 import Vh from "../../components/vh.astro";
 import { getCollection } from "astro:content";
@@ -18,94 +19,7 @@ const { Content } = await post.render();
 <Layout title={post.data.title} atUri={post.data.atUri} ogImage={post.data.ogImage}>
     <Vh>
         <div class="prose">
-            {
-                post.data.tags.length > 0 && (
-                    <div class="tags">
-                        {post.data.tags.map((tag: string) => (
-                            <span class="tag">{tag}</span>
-                        ))}
-                    </div>
-                )
-            }
             <Content />
         </div>
     </Vh>
 </Layout>
-
-<style is:global>
-    .prose {
-        font-size: 1.9em;
-        padding-bottom: 4rem;
-    }
-
-    .tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5em;
-        margin-bottom: 1.5em;
-    }
-
-    .tag {
-        background-color: var(--black-kite);
-        color: var(--morning-snow);
-        font-size: 0.5em;
-        padding: 0.2em 0.6em;
-        border-radius: 4px;
-    }
-
-    .prose h1 {
-        font-size: 2.5em;
-    }
-
-    .prose h2 {
-        font-size: 2em;
-        font-weight: normal;
-    }
-
-    .prose h3 {
-        font-size: 1.5em;
-        font-weight: normal;
-    }
-
-    .prose img {
-        max-width: 70%;
-        height: auto;
-        display: block;
-        margin-inline: auto;
-        margin-block: 2em;
-    }
-
-    @media screen and (max-width: 800px) {
-        .prose img {
-            max-width: 100%;
-        }
-
-        .prose {
-            font-size: 1.2em;
-            text-align: left;
-        }
-
-        .prose h1 {
-            font-size: 1.8em;
-        }
-
-        .prose h2 {
-            font-size: 1.5em;
-        }
-
-        .prose h3 {
-            font-size: 1.2em;
-        }
-    }
-
-    @media (max-width: 768px) {
-        h1 {
-            font-size: 2rem;
-            line-height: 1.1;
-        }
-
-        article {
-            font-size: 1rem;
-        }
-    }
-</style>

@@ -3,6 +3,15 @@
 ---
 
 <footer>
+    <div class="site-map">
+        <a href="/now">[now]</a>
+        <a href="/uses">[uses]</a>
+        <a href="/garden">[garden]</a>
+        <a href="/projects">[projects]</a>
+        <a href="/blog">[blog]</a>
+        <a href="/sitemap">[sitemap]</a>
+    </div>
+
     <div class="socials">
         <a href="https://bsky.app/profile/liampallett.space" target="_blank" rel="noopener noreferrer">[bsky]</a>
         <a href="https://tangled.org/@liampallett.space" target="_blank" rel="noopener noreferrer">[tangled]</a>
@@ -27,6 +36,16 @@
         padding: 2em;
         color: var(--text-muted);
         font-size: 0.9em;
+    }
+
+    .site-map {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        align-items: center;
+
+        padding-bottom: 1rem;
+        border-bottom: 1px dashed var(--border);
     }
     .socials {
         display: flex;

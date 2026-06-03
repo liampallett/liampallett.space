@@ -45,6 +45,7 @@ const publicationUri = "at://did:plc:tgb4klpomminc5lv3clzb6wm/site.standard.publ
         <meta property="og:title" content={title} />
         <meta property="og:description" content="Software Engineering student & developer." />
         <meta property="og:type" content="website" />
+        <meta name="color-scheme" content="light dark" />
         <link rel="site.standard.publication" href={publicationUri} />
 
         {atUri && <link rel="site.standard.document" href={atUri} />}
@@ -88,6 +89,18 @@ const publicationUri = "at://did:plc:tgb4klpomminc5lv3clzb6wm/site.standard.publ
             --text-muted: #6b6b6b;
             --accent: #4a5568;
             --border: #d4d3d0;
+            --garden-accent: #7cb342;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #161514;
+                --bg-subtle: #1f1e1d;
+                --text: #e8e6e3;
+                --text-muted: #a8a39c;
+                --accent: #b0b6c2;
+                --border: #31302d;
+            }
         }
 
         html {

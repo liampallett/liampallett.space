@@ -1,0 +1,44 @@
+---
+import Layout from "../layouts/layout.astro";
+
+interface Props {
+    title: string;
+    dateLastUpdated?: string;
+}
+
+const { title, dateLastUpdated } = Astro.props;
+---
+
+<Layout title={title}>
+    <div class="page">
+        <h1>/{title}</h1>
+        {dateLastUpdated && <p class="updated">updated {dateLastUpdated}</p>}
+        <slot />
+    </div>
+
+    <style>
+        .page {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+            min-height: calc(100vh - var(--header-height));
+        }
+
+        .updated {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .page h1 {
+            margin-bottom: 0.25rem;
+        }
+
+        h2 {
+            margin-top: 2rem;
+        }
+
+        a {
+            color: var(--text);
+        }
+    </style>
+</Layout>

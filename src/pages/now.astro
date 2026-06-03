@@ -1,69 +1,38 @@
 ---
-import Layout from "../layouts/layout.astro";
+import Basic from "../layouts/basic.astro";
 ---
 
-<Layout title="now">
-    <div class="page">
-        <h1>/now</h1>
-        <p class="updated">updated june 2026</p>
+<Basic title="now" dateLastUpdated="june 2026">
+    <p>This is a snapshot of what I'm doing right now. Updated whenever things change enough to be worth noting.</p>
 
-        <p>This is a snapshot of what I'm doing right now. Updated whenever things change enough to be worth noting.</p>
+    <h2>working on</h2>
+    <ul>
+        <li>revising for exams :/</li>
+        <li>helping to establish the uni of sheffield microcontroller hackerspace</li>
+    </ul>
 
-        <h2>working on</h2>
-        <ul>
-            <li>revising for exams :/</li>
-            <li>helping to establish the uni of sheffield microcontroller hackerspace</li>
-        </ul>
+    <h2>current interests</h2>
+    <ul>
+        <li>irc / rss / "obsolete" technologies</li>
+        <li>linux and self-hosting</li>
+        <li>astrophotography</li>
+    </ul>
 
-        <h2>current interests</h2>
-        <ul>
-            <li>irc / rss / "obsolete" technologies</li>
-            <li>linux and self-hosting</li>
-            <li>astrophotography</li>
-        </ul>
+    <h2>reading</h2>
+    <ul>
+        <li>atomic habits - james clear</li>
+        <li>the let them theory - mel robbins</li>
+        <li>voyage - steven baxter</li>
+    </ul>
 
-        <h2>reading</h2>
-        <ul>
-            <li>atomic habits - james clear</li>
-            <li>the let them theory - mel robbins</li>
-            <li>voyage - steven baxter</li>
-        </ul>
+    <h2>thinking about</h2>
+    <ul>
+        <li>linear algebra (not for long!)</li>
+        <li>making the website more personal</li>
+    </ul>
 
-        <h2>thinking about</h2>
-        <ul>
-            <li>linear algebra (not for long!)</li>
-            <li>making the website more personal</li>
-        </ul>
-
-        <p>
-            Inspired by <a href="https://nownownow.com/about" target="_blank" rel="noopener noreferrer"
-                >the /now movement</a
-            >.
-        </p>
-    </div>
-</Layout>
-
-<style>
-    .page {
-        max-width: 700px;
-        margin: 0 auto;
-        padding: 3rem 1.5rem;
-    }
-
-    .updated {
-        color: var(--text-muted);
-        font-size: 0.9rem;
-    }
-
-    .page h1 {
-        margin-bottom: 0.25rem;
-    }
-
-    h2 {
-        margin-top: 2rem;
-    }
-
-    a {
-        color: var(--text);
-    }
-</style>
+    <p>
+        Inspired by <a href="https://nownownow.com/about" target="_blank" rel="noopener noreferrer">the /now movement</a
+        >.
+    </p>
+</Basic>

@@ -1,78 +1,48 @@
 ---
-import Layout from "../layouts/layout.astro";
+import Basic from "../layouts/basic.astro";
 ---
 
-<Layout title="uses">
-    <div class="page">
-        <h1>/uses</h1>
-        <p class="updated">updated june 2026</p>
+<Basic title="uses" dateLastUpdated="june 2026">
+    <p>Hardware, software, and assorted tools I use regularly. Updated as things change.</p>
 
-        <p>Hardware, software, and assorted tools I use regularly. Updated as things change.</p>
+    <h2>hardware</h2>
+    <ul>
+        <li>MacBook Pro 16" M4 Max 128GB 2TB</li>
+        <li>Keychron HE2</li>
+        <li>Logitech MX Master 4</li>
+    </ul>
 
-        <h2>hardware</h2>
-        <ul>
-            <li>MacBook Pro 16" M4 Max 128GB 2TB</li>
-            <li>Keychron HE2</li>
-            <li>Logitech MX Master 4</li>
-        </ul>
+    <h2>software</h2>
+    <ul>
+        <li>macOS</li>
+        <li>Zed for development</li>
+        <li>Zen for surfing the net</li>
+        <li>Obsidian for uni, project & life notes</li>
+    </ul>
 
-        <h2>software</h2>
-        <ul>
-            <li>macOS</li>
-            <li>Zed for development</li>
-            <li>Zen for surfing the net</li>
-            <li>Obsidian for uni, project & life notes</li>
-        </ul>
+    <h2>development</h2>
+    <ul>
+        <li>Frameworks: Astro, tview</li>
+        <li>Languages: Python, Go, C++, Java</li>
+        <li>Tools: Git</li>
+    </ul>
 
-        <h2>development</h2>
-        <ul>
-            <li>Frameworks: Astro, tview</li>
-            <li>Languages: Python, Go, C++, Java</li>
-            <li>Tools: Git</li>
-        </ul>
+    <h2>astrophotography</h2>
 
-        <h2>astrophotography</h2>
+    <ul>
+        <li>Camera: Canon 6D</li>
+        <li>Lenses: Samyang 135mm f/2, Samyang 24mm f/1.4</li>
+        <li>Star Adventurer</li>
+        <li>Siril</li>
+        <li>GIMP</li>
+    </ul>
 
-        <ul>
-            <li>Camera: Canon 6D</li>
-            <li>Lenses: Samyang 135mm f/2, Samyang 24mm f/1.4</li>
-            <li>Star Adventurer</li>
-            <li>Siril</li>
-            <li>GIMP</li>
-        </ul>
+    <h2>internet</h2>
 
-        <h2>internet</h2>
-
-        <ul>
-            <li>RSS feeds</li>
-            <li>IRC</li>
-            <li>Bluesky</li>
-            <li>A collection of increasingly niche blogs</li>
-        </ul>
-    </div>
-</Layout>
-
-<style>
-    .page {
-        max-width: 700px;
-        margin: 0 auto;
-        padding: 3rem 1.5rem;
-    }
-
-    .updated {
-        color: var(--text-muted);
-        font-size: 0.9rem;
-    }
-
-    .page h1 {
-        margin-bottom: 0.25rem;
-    }
-
-    h2 {
-        margin-top: 2rem;
-    }
-
-    a {
-        color: var(--text);
-    }
-</style>
+    <ul>
+        <li>RSS feeds</li>
+        <li>IRC</li>
+        <li>Bluesky</li>
+        <li>A collection of increasingly niche blogs</li>
+    </ul>
+</Basic>

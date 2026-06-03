@@ -1,49 +1,9 @@
 ---
-import Layout from "../layouts/layout.astro";
-import Vh from "../components/vh.astro";
+import Basic from "../layouts/basic.astro";
 ---
 
-<Layout title="404 - Page not found">
-    <Vh>
-        <h1>Whoops! This is embarrassing.</h1>
-        <h2>You probably aren't supposed to see this page.</h2>
-        <p>Did you mean to visit the <a href="/">homepage</a>?</p>
-    </Vh>
-</Layout>
-
-<style>
-    h1 {
-        font-size: 5em;
-        margin: 0;
-    }
-
-    h2 {
-        font-size: 2.5em;
-        margin: 0;
-    }
-
-    p {
-        font-size: 2.5em;
-        margin: 0;
-    }
-
-    a {
-        color: var(--black-kite);
-        transition: color 0.1s ease-in-out;
-    }
-
-    a:hover {
-        color: var(--garnet);
-    }
-
-    @media screen and (max-width: 800px) {
-        h1 {
-            font-size: 3.5em;
-        }
-
-        h2,
-        p {
-            font-size: 1.5em;
-        }
-    }
-</style>
+<Basic title="404">
+    <h1>Our page is in another castle!</h1>
+    <h2>The page you're looking for may have been moved, updated, or never existed (spooky!).</h2>
+    <p>Venture back <a href="/">home</a></p>
+</Basic>

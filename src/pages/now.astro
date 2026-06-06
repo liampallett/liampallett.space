@@ -1,5 +1,10 @@
 ---
 import Basic from "../layouts/basic.astro";
+import MediaGallery from "../components/mediaGallery.astro";
+
+import albumItems from "../data/albums";
+import bookItems from "../data/books";
+import watchingItems from "../data/watching";
 ---
 
 <Basic title="now" dateLastUpdated="june 2026">
@@ -18,21 +23,24 @@ import Basic from "../layouts/basic.astro";
         <li>astrophotography</li>
     </ul>
 
-    <h2>reading</h2>
-    <ul>
-        <li>atomic habits - james clear</li>
-        <li>the let them theory - mel robbins</li>
-        <li>voyage - steven baxter</li>
-    </ul>
-
     <h2>thinking about</h2>
     <ul>
-        <li>linear algebra (not for long!)</li>
         <li>making the website more personal</li>
     </ul>
 
+    <h2>current media</h2>
+
+    <h3>listening</h3>
+    <MediaGallery items={albumItems} variant="square" />
+
+    <h3>reading</h3>
+    <MediaGallery items={bookItems} variant="portrait" />
+
+    <h3>watching</h3>
+    <MediaGallery items={watchingItems} variant="portrait" />
+
     <p>
-        Inspired by <a href="https://nownownow.com/about" target="_blank" rel="noopener noreferrer">the /now movement</a
-        >.
+        Inspired by
+        <a href="https://nownownow.com/about" target="_blank" rel="noopener noreferrer"> the /now movement </a>.
     </p>
 </Basic>

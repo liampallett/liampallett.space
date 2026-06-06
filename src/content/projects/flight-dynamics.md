@@ -8,5 +8,5 @@ tags:
   - "Isentropic Flow"
   - "Simulation"
   - "Rocketry"
-featured: true
+current: true
 ---

@@ -19,7 +19,7 @@ const projects = defineCollection({
         date: z.date(),
         link: z.string(),
         tags: z.array(z.string()),
-        featured: z.boolean().default(false),
+        current: z.boolean().default(false),
     }),
 });
 
@@ -28,6 +28,8 @@ const garden = defineCollection({
         title: z.string(),
         description: z.string(),
         date: z.date(),
+
+        type: z.enum(["note", "link", "book", "project", "thought"]),
     }),
 });
 

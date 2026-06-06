@@ -1,133 +1,243 @@
 ---
 import Layout from "../layouts/layout.astro";
-import Card from "../components/card.astro";
-
 import { getCollection } from "astro:content";
-
-const posts = (await getCollection("blog")).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-const recentPosts = posts.slice(0, 2);
 
 const projects = await getCollection("projects");
 
-const featuredProject =
-    projects.find((project) => project.data.featured) ??
+const currentProject =
+    projects.find((project) => project.data.current) ??
     projects.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())[0];
 ---
 
 <Layout title="liampallett.space">
-    <div class="hero-content">
-        <div class="main-content">
-            <h1 class="name">Hi! I'm Liam Pallett.</h1>
+    <div class="landing-grid">
+        <main>
+            <section>
+                <p class="section-label">// ABOUT</p>
 
-            <p class="blurb">
-                I'm an aspiring aerospace software engineer studying software engineering at the University of
-                Sheffield. Catch me building simulations, writing about space and software, or occasionally disappearing
-                down internet rabbit holes. See what I'm up to <a href="/now">now</a>.
-            </p>
+                <h1 class="name">Building software for space.</h1>
 
-            <section class="featured-project">
-                <h2>Featured Project</h2>
-                <p class="section-blurb">Whatever I'm currently devoting my time to.</p>
+                <div class="meta">
+                    <span>based in sheffield, uk</span>
+                    <span>software engineering @ UoSheffield</span>
+                    <span>developing aerospace software</span>
+                </div>
 
-                {
-                    featuredProject && (
-                        <Card
-                            title={featuredProject.data.title}
-                            link={featuredProject.data.link}
-                            description={featuredProject.data.description}
-                            tags={featuredProject.data.tags}
-                        />
-                    )
-                }
-
-                <a class="link" href="/projects">See all projects</a>
-            </section>
-
-            <section class="recent-posts">
-                <h2>Recent Posts</h2>
-
-                <p class="section-blurb">
-                    Notes on software, space, conferences, astrophotography, and whatever else catches my attention.
+                <p class="blurb">
+                    Hi, I'm Liam Pallett, a software engineering student. I build simulation software for aerospace
+                    applications and occasionally write apps for obsolete technologies.
                 </p>
 
-                {
-                    recentPosts.map((post) => (
-                        <Card
-                            title={post.data.title}
-                            link={`/blog/${post.slug}`}
-                            date={post.data.date}
-                            description={post.data.description}
-                            tags={post.data.tags}
-                        />
-                    ))
-                }
-
-                <a class="link" href="/blog">Read more posts</a>
+                <p class="blurb">
+                    My current work focuses on flight simulation and my TUI IRC client. See what else I'm up to
+                    <a class="link" href="/now">now</a>.
+                </p>
             </section>
-        </div>
+
+            <section class="project-panel">
+                <p class="section-label">// CURRENT FOCUS</p>
+
+                <a href={currentProject.data.link} class="link">
+                    <h2>{currentProject.data.title}</h2>
+                </a>
+
+                <p>{currentProject.data.description}</p>
+
+                <div class="tags">
+                    {currentProject.data.tags.map((tag) => <span>{tag}</span>)}
+                </div>
+
+                <a class="link" href="/projects">see all projects →</a>
+            </section>
+        </main>
+
+        <aside class="activity-panel">
+            <p class="section-label">// ACTIVITY</p>
+
+            <div class="activity-item">
+                <span class="activity-type blog">BLOG</span>
+                <a class="link" href="/blog/between-a-fold"> Between a Fold and a Hard Place </a>
+            </div>
+
+            <div class="activity-item">
+                <span class="activity-type bsky">BSKY</span>
+                <a class="link" href="#">Thinking about AlphaFold...</a>
+            </div>
+
+            <div class="activity-item">
+                <span class="activity-type tangled">TANGLED</span>
+                <a class="link" href="#">Updated Flight Dynamics</a>
+            </div>
+        </aside>
     </div>
 </Layout>
 
 <style>
-    .hero-content {
-        min-height: calc(100vh - var(--header-height));
-        max-width: 900px;
+    /* Layout */
+
+    .landing-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
+        gap: 3rem;
+
+        max-width: 1200px;
         margin: 0 auto;
-        width: 100%;
-        padding: 3em 1.5rem;
+        padding: 3rem 1.5rem;
+
+        align-items: stretch;
     }
 
-    .main-content {
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-    }
+    /* Shared typography */
 
-    /* typography */
-    .name {
-        font-size: 2.5em;
-        margin: 0;
-    }
+    .section-label {
+        margin: 0 0 0.75rem;
 
-    .blurb {
-        font-size: 1.25em;
-        margin: 0;
-    }
-
-    .blurb a {
-        color: var(--text);
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        letter-spacing: 0.1em;
     }
 
     .link {
         color: var(--text);
-        text-decoration: none;
-        font-size: 1.1em;
+        transition: color 0.15s ease;
     }
 
     .link:hover {
         color: var(--text-muted);
     }
 
-    .main-content h2 {
-        margin-bottom: 0;
+    /* About */
+
+    .name {
+        margin: 0 0 0.75rem;
+
+        font-size: clamp(2.5rem, 4vw, 3.5rem);
+        line-height: 0.95;
     }
 
-    .section-blurb {
-        margin: 0.25rem 0 1rem;
+    .meta {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+
+        margin: 1.25rem 0;
+
         color: var(--text-muted);
+        font-size: 0.9rem;
     }
 
-    @media (max-width: 768px) {
-        .card {
-            padding: 1rem 0;
+    .meta span::before {
+        content: "• ";
+    }
+
+    .blurb {
+        margin: 0;
+
+        font-size: 1.15rem;
+        line-height: 1.6;
+    }
+
+    .blurb + .blurb {
+        margin-top: 1rem;
+    }
+
+    /* Current focus */
+
+    .project-panel {
+        margin-top: 2rem;
+        padding-top: 1.25rem;
+
+        border-top: 1px dashed var(--border);
+    }
+
+    .project-panel h2 {
+        margin: 0;
+
+        font-size: 1.5rem;
+        line-height: 1.1;
+    }
+
+    .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+
+        margin: 1rem 0;
+    }
+
+    .tags span {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+    }
+
+    .tags span::before {
+        content: "#";
+    }
+
+    /* Activity */
+
+    .activity-panel {
+        padding-left: 2rem;
+
+        border-left: 1px dashed var(--border);
+    }
+
+    .activity-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+
+        padding: 1rem 0;
+
+        border-bottom: 1px solid var(--border);
+    }
+
+    .activity-item:last-child {
+        border-bottom: none;
+    }
+
+    .activity-type {
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+    }
+
+    .blog {
+        color: #fbbf24;
+    }
+
+    .bsky {
+        color: #60a5fa;
+    }
+
+    .tangled {
+        color: #a78bfa;
+    }
+
+    /* Mobile */
+
+    @media (max-width: 900px) {
+        .landing-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+
+            padding: 2rem 1rem;
         }
 
-        .card h3 {
-            line-height: 1.2;
+        .name {
+            font-size: clamp(2rem, 10vw, 3rem);
         }
 
-        .card .tags {
-            flex-wrap: wrap;
+        .blurb {
+            font-size: 1rem;
+        }
+
+        .activity-panel {
+            padding-top: 2rem;
+            padding-left: 0;
+
+            border-top: 1px dashed var(--border);
+            border-left: none;
         }
     }
 </style>

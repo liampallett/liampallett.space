@@ -1,6 +1,6 @@
 ---
 import Layout from "../layouts/layout.astro";
-import Card from "../components/card.astro";
+import ProjectCard from "../components/projectCard.astro";
 
 import { getCollection } from "astro:content";
 
@@ -39,7 +39,7 @@ const groupedProjects = Object.groupBy(projects, (project) => project.data.date.
             {
                 projects.map((project) => (
                     <section id={project.slug}>
-                        <Card
+                        <ProjectCard
                             title={project.data.title}
                             link={project.data.link}
                             description={project.data.description}

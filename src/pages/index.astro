@@ -7,6 +7,8 @@ const projects = await getCollection("projects");
 const currentProject =
     projects.find((project) => project.data.current) ??
     projects.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())[0];
+
+import ActivityFeed from "../components/activityFeed.tsx";
 ---
 
 <Layout title="liampallett.space">
@@ -54,20 +56,7 @@ const currentProject =
         <aside class="activity-panel">
             <p class="section-label">// ACTIVITY</p>
 
-            <div class="activity-item">
-                <span class="activity-type blog">BLOG</span>
-                <a class="link" href="/blog/between-a-fold"> Between a Fold and a Hard Place </a>
-            </div>
-
-            <div class="activity-item">
-                <span class="activity-type bsky">BSKY</span>
-                <a class="link" href="#">Thinking about AlphaFold...</a>
-            </div>
-
-            <div class="activity-item">
-                <span class="activity-type tangled">TANGLED</span>
-                <a class="link" href="#">Updated Flight Dynamics</a>
-            </div>
+            <ActivityFeed client:load />
         </aside>
     </div>
 </Layout>
@@ -97,12 +86,12 @@ const currentProject =
         letter-spacing: 0.1em;
     }
 
-    .link {
+    :global(.link) {
         color: var(--text);
         transition: color 0.15s ease;
     }
 
-    .link:hover {
+    :global(.link:hover) {
         color: var(--text-muted);
     }
 
@@ -239,5 +228,65 @@ const currentProject =
             border-top: 1px dashed var(--border);
             border-left: none;
         }
+    }
+
+    :global(.activity-item) {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--border);
+    }
+
+    :global(.activity-item:last-child) {
+        border-bottom: none;
+    }
+
+    :global(.activity-type) {
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+    }
+
+    :global(.activity-meta) {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+    }
+
+    :global(.activity-time) {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+    }
+
+    :global(.activity-image) {
+        margin-top: 0.5rem;
+        width: 100%;
+        height: auto;
+        max-height: 600px;
+        object-fit: contain;
+        display: block;
+        border-radius: 4px;
+    }
+
+    :global(.activity-status) {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+
+    :global(.blog) {
+        color: #fbbf24;
+    }
+    :global(.bsky) {
+        color: #60a5fa;
+    }
+    :global(.pr) {
+        color: #34d399;
+    }
+    :global(.repo) {
+        color: #a78bfa;
+    }
+    :global(.commit) {
+        color: #a78bfa;
     }
 </style>

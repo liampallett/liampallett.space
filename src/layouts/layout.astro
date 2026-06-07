@@ -50,6 +50,18 @@ const publicationUri = "at://did:plc:tgb4klpomminc5lv3clzb6wm/site.standard.publ
 
         {atUri && <link rel="site.standard.document" href={atUri} />}
 
+        <script is:inline>
+            const stored = localStorage.getItem("theme");
+
+            if (stored) {
+                document.documentElement.dataset.theme = stored;
+            } else {
+                document.documentElement.dataset.theme = window.matchMedia("(prefers-color-scheme: dark)").matches
+                    ? "dark"
+                    : "light";
+            }
+        </script>
+
         <title>{title}</title>
     </head>
 
@@ -92,15 +104,13 @@ const publicationUri = "at://did:plc:tgb4klpomminc5lv3clzb6wm/site.standard.publ
             --garden-accent: #7cb342;
         }
 
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg: #161514;
-                --bg-subtle: #1f1e1d;
-                --text: #e8e6e3;
-                --text-muted: #a8a39c;
-                --accent: #b0b6c2;
-                --border: #31302d;
-            }
+        :root[data-theme="dark"] {
+            --bg: #161514;
+            --bg-subtle: #1f1e1d;
+            --text: #e8e6e3;
+            --text-muted: #a8a39c;
+            --accent: #b0b6c2;
+            --border: #31302d;
         }
 
         html {

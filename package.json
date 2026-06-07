@@ -9,6 +9,7 @@
         "astro": "astro"
     },
     "dependencies": {
+        "@astrojs/react": "^5.0.7",
         "@astrojs/rss": "^4.0.18",
         "@atproto/api": "^0.20.8",
         "@bryanguffey/astro-standard-site": "^1.0.3",
@@ -16,6 +17,8 @@
         "dotenv": "^17.4.2",
         "fast-xml-parser": "^5.8.0",
         "gray-matter": "^4.0.3",
+        "react": "^19.2.7",
+        "react-dom": "^19.2.7",
         "rehype-katex": "^7.0.1",
         "remark-math": "^6.0.0"
     },

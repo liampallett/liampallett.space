@@ -6,7 +6,6 @@ import netlify from "@astrojs/netlify";
 
 export default defineConfig({
     site: "https://liampallett.space",
-    output: "hybrid",
     adapter: netlify(),
     integrations: [react()],
     markdown: {

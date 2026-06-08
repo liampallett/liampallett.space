@@ -1,6 +1,8 @@
 # [liampallett.space](https://liampallett.space)
 
-Personal portfolio website and blog.
+Personal website with portfolio and blog.
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/f8d5d8af-99e5-4dda-b839-7246b0bfda2f/deploy-status)](https://app.netlify.com/projects/liampallett-space/deploys)
 
 ---
 

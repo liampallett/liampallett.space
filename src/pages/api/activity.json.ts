@@ -1,6 +1,8 @@
 import { fetchBskyPosts, fetchBlogPosts } from "../../lib/atproto";
 import { fetchTangled } from "../../lib/tangled";
 
+export const prerender = false;
+
 export async function GET() {
     const [bsky, blog, tangled] = await Promise.allSettled([fetchBskyPosts(), fetchBlogPosts(), fetchTangled()]);
 

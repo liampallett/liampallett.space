@@ -64,8 +64,15 @@ export async function fetchTangled(): Promise<ActivityItem[]> {
         return parseEntries(result.value, "commits");
     });
 
+    // Profile and commit feeds can surface the same item (e.g. a PR), so
+    // dedupe by URL, keeping the first (profile) occurrence.
+    const seen = new Set<string>();
+
     return [...profileItems, ...commitItems]
-        .filter((item) => !item.url.includes("/pulls/")) // remove PR duplicates from commit feeds
-        .concat(profileItems.filter((item) => item.action === "pr")) // keep PRs from profile feed only
+        .filter((item) => {
+            if (seen.has(item.url)) return false;
+            seen.add(item.url);
+            return true;
+        })
         .sort((a, b) => b.date.valueOf() - a.date.valueOf());
 }

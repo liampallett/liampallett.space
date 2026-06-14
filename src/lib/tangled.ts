@@ -1,4 +1,3 @@
-// src/lib/tangled.ts
 import type { ActivityItem } from "./activity";
 
 const HANDLE = "liampallett.space";
@@ -39,7 +38,7 @@ function extractRepoNames(xml: string): string[] {
     const repos = new Set<string>();
 
     for (const entry of entries) {
-        // matches "created repository 'name'" and PR entries which contain a repo
+        // grabs the repo slug from any tangled.org/@handle/<repo>/... link in the entry
         const repoMatch = entry.match(/\/@liampallett\.space\/([^/"<\s]+)/);
         if (repoMatch) repos.add(repoMatch[1]);
     }

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import type { ActivityItem } from "../lib/activity";
 
-function timeAgo(date: Date): string {
-    const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+function timeAgo(date: Date, now: number): string {
+    const seconds = Math.floor((now - date.getTime()) / 1000);
     if (seconds < 60) return "just now";
     const minutes = Math.floor(seconds / 60);
     if (minutes < 60) return `${minutes}m ago`;
@@ -32,6 +32,12 @@ export default function ActivityFeed() {
     const [items, setItems] = useState<ActivityItem[]>([]);
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [now, setNow] = useState(() => Date.now());
+
+    useEffect(() => {
+        const id = setInterval(() => setNow(Date.now()), 60_000);
+        return () => clearInterval(id);
+    }, []);
 
     useEffect(() => {
         fetch("/api/activity.json")
@@ -63,7 +69,7 @@ export default function ActivityFeed() {
                         <span className={`activity-type ${item.type === "tangled" ? item.action : item.type}`}>
                             {label(item)}
                         </span>
-                        <span className="activity-time">{timeAgo(item.date)}</span>
+                        <span className="activity-time">{timeAgo(item.date, now)}</span>
                     </div>
                     <a className="link" href={item.url} target="_blank" rel="noopener noreferrer">
                         {displayText(item)}

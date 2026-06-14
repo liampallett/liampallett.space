@@ -75,9 +75,7 @@ const allTags = [...new Set(posts.flatMap((post) => post.data.tags))].sort();
                 ))
             }
 
-            <p class="no-results" hidden>
-                No posts match the selected tag.
-            </p>
+            <p class="no-results" hidden>No posts match the selected tag.</p>
         </main>
     </div>
 </Layout>

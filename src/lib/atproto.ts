@@ -8,6 +8,7 @@ export async function fetchBskyPosts(): Promise<ActivityItem[]> {
         `${PDS}/xrpc/com.atproto.repo.listRecords?repo=${DID}&collection=app.bsky.feed.post&limit=10`,
     );
     const { records } = await res.json();
+    if (!Array.isArray(records)) return [];
     return records
         .map((r: any) => ({
             type: "bsky" as const,
@@ -26,6 +27,7 @@ export async function fetchBlogPosts(): Promise<ActivityItem[]> {
         `${PDS}/xrpc/com.atproto.repo.listRecords?repo=${DID}&collection=site.standard.document&limit=10`,
     );
     const { records } = await res.json();
+    if (!Array.isArray(records)) return [];
     return records.map((r: any) => ({
         type: "blog" as const,
         title: r.value.title,

@@ -10,6 +10,8 @@ const years = Object.keys(grouped);
 const showSidebar = years.length > 1;
 
 const sortedYears = Object.entries(grouped).sort(([a], [b]) => Number(b) - Number(a));
+
+const allTags = [...new Set(posts.flatMap((post) => post.data.tags))].sort();
 ---
 
 <Layout title="blog">
@@ -26,13 +28,25 @@ const sortedYears = Object.entries(grouped).sort(([a], [b]) => Number(b) - Numbe
 
         <main class="archive-content">
             {
+                allTags.length > 0 && (
+                    <div class="tag-filters">
+                        {allTags.map((tag) => (
+                            <button type="button" class="tag-filter" data-tag={tag}>
+                                {tag}
+                            </button>
+                        ))}
+                    </div>
+                )
+            }
+
+            {
                 sortedYears.map(([year, yearPosts]) => (
-                    <section id={year}>
+                    <section id={year} data-year-section>
                         <h2>{year}</h2>
 
                         <ul>
                             {yearPosts?.map((post) => (
-                                <li>
+                                <li data-tags={post.data.tags.join(",")}>
                                     <span class="date">
                                         {post.data.date
                                             .toLocaleDateString("en-GB", {
@@ -46,6 +60,13 @@ const sortedYears = Object.entries(grouped).sort(([a], [b]) => Number(b) - Numbe
                                         <a href={`/blog/${post.slug}`}>{post.data.title}</a>
 
                                         <p>{post.data.description}</p>
+
+                                        {post.data.tags.length > 0 && (
+                                            <p class="tags">
+                                                <span>tags:</span>
+                                                {post.data.tags.join(", ")}
+                                            </p>
+                                        )}
                                     </div>
                                 </li>
                             ))}
@@ -53,6 +74,10 @@ const sortedYears = Object.entries(grouped).sort(([a], [b]) => Number(b) - Numbe
                     </section>
                 ))
             }
+
+            <p class="no-results" hidden>
+                No posts match the selected tag.
+            </p>
         </main>
     </div>
 </Layout>
@@ -72,7 +97,7 @@ const sortedYears = Object.entries(grouped).sort(([a], [b]) => Number(b) - Numbe
 
     @media (max-width: 768px) {
         .archive-layout {
-            padding: 0 1rem;
+            padding: 2rem 1rem 0;
             box-sizing: border-box;
         }
 
@@ -114,6 +139,46 @@ const sortedYears = Object.entries(grouped).sort(([a], [b]) => Number(b) - Numbe
         color: var(--text);
     }
 
+    .tag-filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .tag-filter {
+        font: inherit;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        background: none;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 0.25rem 0.75rem;
+        cursor: pointer;
+        transition:
+            color 0.15s ease,
+            border-color 0.15s ease;
+    }
+
+    .tag-filter:hover {
+        color: var(--text);
+    }
+
+    .tag-filter.active {
+        color: var(--text);
+        border-color: var(--text);
+    }
+
+    .archive-content .tags {
+        margin-top: 0.4rem;
+        font-size: 0.9em;
+        opacity: 1;
+    }
+
+    .no-results {
+        opacity: 0.7;
+    }
+
     .archive-content section {
         margin-bottom: 3rem;
     }
@@ -132,6 +197,11 @@ const sortedYears = Object.entries(grouped).sort(([a], [b]) => Number(b) - Numbe
         display: flex;
         gap: 1rem;
         margin-bottom: 0.5rem;
+    }
+
+    .archive-content li[hidden],
+    [data-year-section][hidden] {
+        display: none;
     }
 
     .date {
@@ -159,7 +229,7 @@ const sortedYears = Object.entries(grouped).sort(([a], [b]) => Number(b) - Numbe
     @media (max-width: 768px) {
         .archive-layout {
             grid-template-columns: 1fr;
-            padding: 0 1rem;
+            padding: 2rem 1rem 0;
         }
 
         .sidebar {
@@ -178,3 +248,47 @@ const sortedYears = Object.entries(grouped).sort(([a], [b]) => Number(b) - Numbe
         }
     }
 </style>
+
+<script>
+    const buttons = [...document.querySelectorAll<HTMLButtonElement>(".tag-filter")];
+    const sections = [...document.querySelectorAll<HTMLElement>("[data-year-section]")];
+    const noResults = document.querySelector<HTMLElement>(".no-results");
+
+    let activeTag: string | null = null;
+
+    const applyFilter = () => {
+        let anyVisible = false;
+
+        for (const section of sections) {
+            let sectionHasVisible = false;
+
+            for (const item of section.querySelectorAll<HTMLLIElement>("li")) {
+                const tags = (item.dataset.tags ?? "").split(",");
+                const visible = !activeTag || tags.includes(activeTag);
+
+                item.hidden = !visible;
+
+                if (visible) {
+                    sectionHasVisible = true;
+                    anyVisible = true;
+                }
+            }
+
+            section.hidden = !sectionHasVisible;
+        }
+
+        if (noResults) noResults.hidden = anyVisible;
+    };
+
+    buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+            const tag = button.dataset.tag ?? null;
+
+            activeTag = activeTag === tag ? null : tag;
+
+            buttons.forEach((b) => b.classList.toggle("active", b.dataset.tag === activeTag));
+
+            applyFilter();
+        });
+    });
+</script>

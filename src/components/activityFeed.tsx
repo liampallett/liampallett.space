@@ -57,12 +57,12 @@ export default function ActivityFeed() {
             .finally(() => setLoading(false));
     }, []);
 
-    if (loading) return <p className="activity-status">loading activity...</p>;
+    if (loading) return <div className="activity-feed activity-feed-placeholder" aria-hidden="true" />;
     if (error) return <p className="activity-status">couldn't load activity.</p>;
     if (items.length === 0) return <p className="activity-status">no activity yet.</p>;
 
     return (
-        <div>
+        <div className="activity-feed">
             {items.map((item) => (
                 <div key={item.url} className="activity-item">
                     <div className="activity-meta">

@@ -9,6 +9,7 @@ const currentProject =
     projects.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())[0];
 
 import ActivityFeed from "../components/activityFeed.tsx";
+import CommitGraph from "../components/commitGraph.tsx";
 ---
 
 <Layout title="liampallett.space">
@@ -54,7 +55,11 @@ import ActivityFeed from "../components/activityFeed.tsx";
         </main>
 
         <aside class="activity-panel">
-            <p class="section-label">// ACTIVITY</p>
+            <p class="section-label">// COMMITS</p>
+
+            <CommitGraph client:load />
+
+            <p class="section-label commits-divider">// ACTIVITY</p>
 
             <ActivityFeed client:load />
         </aside>
@@ -240,6 +245,118 @@ import ActivityFeed from "../components/activityFeed.tsx";
     :global(.activity-status) {
         color: var(--text-muted);
         font-size: 0.9rem;
+    }
+
+    :global(.activity-feed) {
+        min-height: 200px;
+        animation: panel-fade-in 0.3s ease both;
+    }
+
+    :global(.activity-feed-placeholder) {
+        animation: none;
+    }
+
+    .commits-divider {
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px dashed var(--border);
+    }
+
+    /* Commit graph */
+
+    @keyframes panel-fade-in {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    /*
+     * The islands fetch client-side, so reserve their height up front and
+     * fade content in — this avoids the layout shift / flicker as each panel
+     * swaps from its loading state to real data.
+     */
+    :global(.commit-graph) {
+        min-height: 112px;
+        animation: panel-fade-in 0.3s ease both;
+    }
+
+    :global(.commit-graph-placeholder) {
+        animation: none;
+    }
+
+    :global(.commit-graph-scroll) {
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+    }
+
+    :global(.commit-grid) {
+        display: flex;
+        gap: 3px;
+        width: max-content;
+    }
+
+    :global(.commit-week) {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    :global(.commit-day) {
+        width: 10px;
+        height: 10px;
+        border-radius: 2px;
+        background: var(--bg-subtle);
+        border: 1px solid var(--border);
+    }
+
+    :global(.commit-day.level-1) {
+        background: color-mix(in srgb, var(--garden-accent) 35%, var(--bg-subtle));
+        border-color: transparent;
+    }
+    :global(.commit-day.level-2) {
+        background: color-mix(in srgb, var(--garden-accent) 60%, var(--bg-subtle));
+        border-color: transparent;
+    }
+    :global(.commit-day.level-3) {
+        background: color-mix(in srgb, var(--garden-accent) 80%, var(--bg-subtle));
+        border-color: transparent;
+    }
+    :global(.commit-day.level-4) {
+        background: var(--garden-accent);
+        border-color: transparent;
+    }
+
+    :global(.commit-day[data-future]) {
+        visibility: hidden;
+    }
+
+    :global(.commit-graph-meta) {
+        margin: 0.5rem 0 0;
+        color: var(--text-muted);
+        font-size: 0.75rem;
+    }
+
+    :global(.commit-day:not([data-future])) {
+        cursor: pointer;
+    }
+
+    :global(.commit-tooltip) {
+        position: fixed;
+        z-index: 200;
+        transform: translate(-50%, calc(-100% - 8px));
+
+        padding: 0.3rem 0.55rem;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        background: var(--bg-subtle);
+        color: var(--text);
+
+        font-size: 0.75rem;
+        white-space: nowrap;
+        pointer-events: none;
     }
 
     :global(.blog) {

@@ -123,4 +123,52 @@ const { items, variant = "square" } = Astro.props;
         color: var(--text);
         font: inherit;
     }
+
+    /*
+     * The hover-to-expand interaction relies on a pointer and fixed widths,
+     * neither of which works on touch. On narrow screens fall back to a
+     * plainly scrollable row so covers never overflow the page.
+     */
+    @media (max-width: 768px) {
+        .media-gallery {
+            margin-left: 0;
+            overflow-x: auto;
+            gap: 0.5rem;
+        }
+
+        .media-item,
+        .media-gallery.square .media-item:hover,
+        .media-gallery.portrait .media-item:hover {
+            width: auto;
+            flex-shrink: 0;
+        }
+
+        .media-gallery img,
+        .media-item:hover img {
+            transform: none;
+            margin-top: 0;
+        }
+
+        .media-gallery.square img,
+        .media-gallery.square .media-item:hover img {
+            width: 120px;
+            height: 120px;
+            margin-top: 0;
+        }
+
+        .media-gallery.portrait img,
+        .media-gallery.portrait .media-item:hover img {
+            width: 110px;
+            height: 165px;
+            margin-top: 0;
+        }
+
+        .media-title {
+            position: static;
+            visibility: visible;
+            margin-top: 0.25rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+    }
 </style>

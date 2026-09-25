@@ -28,19 +28,11 @@ export default [
         image: "https://cdn.sonemic.net/i/600/w/23bd0d059b997ee91d81bd85bb9cfbcb/8964258/the-microphones-the-glow-pt-2-Cover-Art.jpg",
     },
     {
-        title: "I Can Hear the Heart Beating as One - Yo La Tengo",
-        image: "https://cdn.sonemic.net/i/600/w/19a9fba83c9d759de086afbf51ac5920/8674116/yo-la-tengo-i-can-hear-the-heart-beating-as-one-Cover-Art.jpg",
-    },
-    {
         title: "Bad Blood - Bastille",
         image: "https://cdn.sonemic.net/i/600/w/c47dbc7e2f5af27ab129f4c263846136/12543995/bastille-bad-blood-Cover-Art.jpg",
     },
     {
         title: "How to Leave Town - Car Seat Headrest",
         image: "https://cdn.sonemic.net/i/600/w/c54cf484e1ae7430e773f01a17028a55/10166622/car-seat-headrest-how-to-leave-town-Cover-Art.jpg",
-    },
-    {
-        title: "Surviving Mars OST - George Strezov",
-        image: "https://cdn.sonemic.net/i/600/w/b8edc527b16a811a3b80c91e62e1f31c/7730609/george-strezov-surviving-mars-Cover-Art.jpg",
     },
 ];

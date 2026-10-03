@@ -59,3 +59,8 @@ Personal website with portfolio and blog.
 │       └── projects.astro
 └── tsconfig.json
 ```
+
+## Sync PDS after new blog post
+```bash
+npx tsx scripts/pds-sync.ts
+```

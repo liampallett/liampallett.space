@@ -2,7 +2,7 @@
 title: "NSSC Day 1"
 date: 2026-03-14
 description: "Reflect on day one of UKSEDS NSSC in King's College London with me!"
-tags: ["NSSC 2026", "Conference"]
+tags: ["NSSC 2026", "Conference", "Reflective Piece"]
 atUri: "at://did:plc:tgb4klpomminc5lv3clzb6wm/site.standard.document/3mn5m2lxxy2sw"
 ---
 

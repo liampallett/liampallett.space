@@ -63,8 +63,11 @@ export default function CommitGraph() {
     const canHover = typeof window !== "undefined" && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
     useEffect(() => {
-        fetch("/api/commits.json")
-            .then((r) => r.json())
+        fetch("/api/commits.json", { signal: AbortSignal.timeout(15000) })
+            .then((r) => {
+                if (!r.ok) throw new Error("Commit request failed");
+                return r.json();
+            })
             .then(setGraph)
             .catch(() => setError(true));
     }, []);
@@ -82,7 +85,7 @@ export default function CommitGraph() {
                 <p className="activity-status">couldn't load commits.</p>
             </div>
         );
-    if (!graph) return <div className="commit-graph commit-graph-placeholder" aria-hidden="true" />;
+    if (!graph) return <p className="activity-status" role="status">loading commits…</p>;
 
     const weeks = buildWeeks(graph.counts);
     const today = dayKey(new Date());

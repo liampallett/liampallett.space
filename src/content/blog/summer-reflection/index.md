@@ -3,7 +3,7 @@ title: "Summer reflection"
 date: 2026-10-03
 description: "Reflecting on my time spent over summer, from my internship to my personal projects."
 tags: [ "Summer 2026", "Reflective Piece" ]
-atUri: ""atUri: "at://did:plc:tgb4klpomminc5lv3clzb6wm/site.standard.document/3mwyxwmij7225"
+atUri: "at://did:plc:tgb4klpomminc5lv3clzb6wm/site.standard.document/3mwyxwmij7225"
 ---
 
 Summer 2026 has been an incredible blur of hands-on engineering, professional growth, and deep dives into personal

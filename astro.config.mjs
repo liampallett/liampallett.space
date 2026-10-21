@@ -6,7 +6,8 @@ import netlify from "@astrojs/netlify";
 
 export default defineConfig({
     site: "https://liampallett.space",
-    adapter: netlify(),
+    // Local Astro routes do not need Netlify's Deno-based Edge emulator.
+    adapter: process.argv.includes("dev") ? undefined : netlify(),
     integrations: [react()],
     markdown: {
         remarkPlugins: [remarkMath],

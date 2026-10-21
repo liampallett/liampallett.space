@@ -6,6 +6,7 @@ const PDS = "https://gomphus.us-west.host.bsky.network";
 export async function fetchBskyPosts(): Promise<ActivityItem[]> {
     const res = await fetch(
         `${PDS}/xrpc/com.atproto.repo.listRecords?repo=${DID}&collection=app.bsky.feed.post&limit=10`,
+        { signal: AbortSignal.timeout(5000) },
     );
     const { records } = await res.json();
     if (!Array.isArray(records)) return [];
@@ -25,6 +26,7 @@ export async function fetchBskyPosts(): Promise<ActivityItem[]> {
 export async function fetchBlogPosts(): Promise<ActivityItem[]> {
     const res = await fetch(
         `${PDS}/xrpc/com.atproto.repo.listRecords?repo=${DID}&collection=site.standard.document&limit=10`,
+        { signal: AbortSignal.timeout(5000) },
     );
     const { records } = await res.json();
     if (!Array.isArray(records)) return [];

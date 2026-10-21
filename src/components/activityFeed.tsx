@@ -17,6 +17,9 @@ function timeAgo(date: Date, now: number): string {
 function label(item: ActivityItem): string {
     if (item.type === "blog") return "# BLOG";
     if (item.type === "bsky") return "@ BSKY";
+    if (item.type === "instagram") return "@ INSTAGRAM";
+    if (item.type === "instagram-story") return "@ IG STORY";
+    if (item.type === "linkedin") return "@ LINKEDIN";
     if (item.action === "pr") return "! PR";
     if (item.action === "repo") return "+ REPO";
     return "> COMMIT";
@@ -40,13 +43,19 @@ export default function ActivityFeed() {
     }, []);
 
     useEffect(() => {
-        fetch("/api/activity.json")
-            .then((r) => r.json())
+        fetch("/api/activity.json", { signal: AbortSignal.timeout(15000) })
+            .then((r) => {
+                if (!r.ok) throw new Error("Activity request failed");
+                return r.json();
+            })
             .then((data) => {
                 const all = [
                     ...(data.bsky.status === "fulfilled" ? data.bsky.value : []),
                     ...(data.blog.status === "fulfilled" ? data.blog.value : []),
                     ...(data.tangled.status === "fulfilled" ? data.tangled.value : []),
+                    ...(data.instagram?.status === "fulfilled" ? data.instagram.value : []),
+                    ...(data.stories?.status === "fulfilled" ? data.stories.value : []),
+                    ...(data.linkedin?.status === "fulfilled" ? data.linkedin.value : []),
                 ]
                     .map((item: any) => ({ ...item, date: new Date(item.date) }))
                     .sort((a: any, b: any) => b.date - a.date)
@@ -57,13 +66,13 @@ export default function ActivityFeed() {
             .finally(() => setLoading(false));
     }, []);
 
-    if (loading) return <div className="activity-feed activity-feed-placeholder" aria-hidden="true" />;
+    if (loading) return <p className="activity-status" role="status">loading activity…</p>;
     if (error) return <p className="activity-status">couldn't load activity.</p>;
     if (items.length === 0) return <p className="activity-status">no activity yet.</p>;
 
     return (
         <div className="activity-feed">
-            {items.map((item) => (
+            {items.filter((item) => !("expiresAt" in item) || !item.expiresAt || Date.parse(item.expiresAt) > now).map((item) => (
                 <div key={item.url} className="activity-item">
                     <div className="activity-meta">
                         <span className={`activity-type ${item.type === "tangled" ? item.action : item.type}`}>
@@ -74,7 +83,7 @@ export default function ActivityFeed() {
                     <a className="link" href={item.url} target="_blank" rel="noopener noreferrer">
                         {displayText(item)}
                     </a>
-                    {item.type === "bsky" && item.image && (
+                    {"image" in item && item.image && (
                         <img className="activity-image" src={item.image} alt="" loading="lazy" />
                     )}
                 </div>

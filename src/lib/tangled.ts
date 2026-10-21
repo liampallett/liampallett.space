@@ -47,7 +47,7 @@ function extractRepoNames(xml: string): string[] {
 }
 
 export async function fetchTangled(): Promise<ActivityItem[]> {
-    const profileRes = await fetch(PROFILE_FEED);
+    const profileRes = await fetch(PROFILE_FEED, { signal: AbortSignal.timeout(5000) });
     const profileXml = await profileRes.text();
 
     const profileItems = parseEntries(profileXml, "profile");
@@ -55,7 +55,7 @@ export async function fetchTangled(): Promise<ActivityItem[]> {
 
     // fetch all repo commit feeds in parallel
     const commitFeeds = await Promise.allSettled(
-        repos.map((repo) => fetch(`https://tangled.org/${HANDLE}/${repo}/feed.atom`).then((r) => r.text())),
+        repos.map((repo) => fetch(`https://tangled.org/${HANDLE}/${repo}/feed.atom`, { signal: AbortSignal.timeout(5000) }).then((r) => r.text())),
     );
 
     const commitItems = commitFeeds.flatMap((result, i) => {

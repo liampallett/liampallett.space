@@ -20,6 +20,7 @@ interface RepoRef {
 async function listRepos(): Promise<RepoRef[]> {
     const res = await fetch(
         `${PDS}/xrpc/com.atproto.repo.listRecords?repo=${DID}&collection=sh.tangled.repo&limit=100`,
+        { signal: AbortSignal.timeout(5000) },
     );
     const { records } = await res.json();
     if (!Array.isArray(records)) return [];
@@ -37,7 +38,7 @@ async function listRepos(): Promise<RepoRef[]> {
  * Omitting `ref` lets the knot pick the repo's default branch (main vs master).
  */
 async function fetchRepoCommitDates({ repoDid, knot }: RepoRef): Promise<Date[]> {
-    const res = await fetch(`https://${knot}/xrpc/sh.tangled.repo.log?repo=${repoDid}&per_page=1000`);
+    const res = await fetch(`https://${knot}/xrpc/sh.tangled.repo.log?repo=${repoDid}&per_page=1000`, { signal: AbortSignal.timeout(5000) });
     const data = await res.json();
     if (!Array.isArray(data?.commits)) return [];
 

@@ -64,3 +64,27 @@ Personal website with portfolio and blog.
 ```bash
 npx tsx scripts/pds-sync.ts
 ```
+
+## Social activity feed
+
+Set `INSTAGRAM_ACCESS_TOKEN` and `INSTAGRAM_USER_ID` in Netlify with the Functions scope, then redeploy. The ID must be the connected Instagram user ID, not the app ID. Optional `INSTAGRAM_API_VERSION` overrides the default `v25.0`.
+
+`npm run dev` uses Astro's local server without Netlify's Edge emulator. For local Instagram requests, also set the two variables in the gitignored `.env` file and restart the server; Netlify's hosted variables are not automatically downloaded.
+
+The server reads posts and active Stories independently, caching each for five minutes per running function instance. Multiple Stories occupy one feed entry. Expired Stories are hidden in the browser too. Videos link to Instagram; only available thumbnails are displayed. Missing credentials disable Instagram; API failures leave other sources working. Check Netlify function logs for sanitized Instagram error codes if a source is absent.
+
+Use a long-lived Instagram user token. Automatic token renewal is not implemented: renew the token before its expiry and update Netlify, then redeploy. A generated token is not necessarily long-lived; check its expiry in Meta's tools. Keep tokens out of Git and client-side variables.
+
+Add LinkedIn posts to `src/data/linkedin.json`, newest first, then redeploy:
+
+```json
+[
+  {
+    "text": "A short description of your update",
+    "url": "https://www.linkedin.com/posts/YOUR-POST",
+    "date": "2026-10-21T12:00:00Z"
+  }
+]
+```
+
+All sources share the existing eight-item limit and chronological ordering. Live Instagram permissions and media must be verified after deployment; a successful build alone does not verify the connected account.

@@ -88,3 +88,13 @@ Add LinkedIn posts to `src/data/linkedin.json`, newest first, then redeploy:
 ```
 
 All sources share the existing eight-item limit and chronological ordering. Live Instagram permissions and media must be verified after deployment; a successful build alone does not verify the connected account.
+
+## GitHub activity and commits
+
+Project links and coding activity use `liampallett` on GitHub. The graph counts commits authored by that account on the default branches of its public owned repositories over the trailing 53 weeks, deduplicating commit SHAs across repositories. Private repositories and commits not linked to the GitHub account are excluded. This is not GitHub's full contribution calendar.
+
+Set an optional server-only `GITHUB_TOKEN` in Netlify with Functions scope for a higher API rate limit, then redeploy. Public read access is sufficient; no private repository permissions are needed. Without a token, GitHub's shared anonymous rate limit may be exhausted. Never use a `PUBLIC_` variable for the token. For local development, put it in the gitignored `.env`.
+
+GitHub results are cached for an hour per function instance. Upstream failures do not produce a partial commit total; the graph shows its error state. PR and repository creation activity comes from GitHub's recent public events, while commit messages come from the same commit data as the graph.
+
+Netlify deploys directly from the GitHub repository's `main` branch. The obsolete Tangled webhook workflow has been removed.

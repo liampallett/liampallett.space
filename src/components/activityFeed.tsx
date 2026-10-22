@@ -52,7 +52,7 @@ export default function ActivityFeed() {
                 const all = [
                     ...(data.bsky.status === "fulfilled" ? data.bsky.value : []),
                     ...(data.blog.status === "fulfilled" ? data.blog.value : []),
-                    ...(data.tangled.status === "fulfilled" ? data.tangled.value : []),
+                    ...(data.github.status === "fulfilled" ? data.github.value : []),
                     ...(data.instagram?.status === "fulfilled" ? data.instagram.value : []),
                     ...(data.stories?.status === "fulfilled" ? data.stories.value : []),
                     ...(data.linkedin?.status === "fulfilled" ? data.linkedin.value : []),
@@ -75,7 +75,7 @@ export default function ActivityFeed() {
             {items.filter((item) => !("expiresAt" in item) || !item.expiresAt || Date.parse(item.expiresAt) > now).map((item) => (
                 <div key={item.url} className="activity-item">
                     <div className="activity-meta">
-                        <span className={`activity-type ${item.type === "tangled" ? item.action : item.type}`}>
+                        <span className={`activity-type ${item.type === "github" ? item.action : item.type}`}>
                             {label(item)}
                         </span>
                         <span className="activity-time">{timeAgo(item.date, now)}</span>

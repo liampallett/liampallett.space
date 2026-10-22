@@ -1,79 +1,58 @@
-const DID = "did:plc:tgb4klpomminc5lv3clzb6wm";
-const PDS = "https://gomphus.us-west.host.bsky.network";
+import { GITHUB_USER, githubPages } from "./github";
 
 export interface CommitGraph {
-    /** Map of YYYY-MM-DD -> commit count, covering the trailing year. */
     counts: Record<string, number>;
-    /** Total commits counted across the window. */
     total: number;
 }
 
-interface RepoRef {
-    repoDid: string;
-    knot: string;
+interface Repo { full_name: string; size: number; private: boolean }
+interface Commit {
+    sha: string;
+    html_url: string;
+    commit: { message: string; author: { date: string } | null };
+}
+interface PublicCommit { sha: string; message: string; url: string; date: string }
+
+let cache: { until: number; commits: PublicCommit[] } | undefined;
+let pending: Promise<PublicCommit[]> | undefined;
+
+/** Public owned repos, default branches, authored by the profile owner. */
+export async function fetchGitHubCommits(): Promise<PublicCommit[]> {
+    if (cache && cache.until > Date.now()) return cache.commits;
+    if (pending) return pending;
+    pending = (async () => {
+        const repos = await githubPages<Repo>(`/users/${GITHUB_USER}/repos?type=owner`);
+        const since = new Date();
+        since.setUTCDate(since.getUTCDate() - 53 * 7);
+        since.setUTCHours(0, 0, 0, 0);
+        const commits = new Map<string, PublicCommit>();
+        // Limit concurrency; an upstream failure must not become a misleading partial graph.
+        const queue = repos.filter((repo) => !repo.private && repo.size > 0);
+        await Promise.all(Array.from({ length: Math.min(3, queue.length) }, async () => {
+            for (let repo = queue.shift(); repo; repo = queue.shift()) {
+                const path = `/repos/${repo.full_name}/commits?author=${GITHUB_USER}&since=${encodeURIComponent(since.toISOString())}`;
+                for (const commit of await githubPages<Commit>(path)) {
+                    const date = commit.commit.author?.date;
+                    if (!date || !Number.isFinite(Date.parse(date)) || Date.parse(date) < since.getTime() || Date.parse(date) > Date.now()) continue;
+                    if (!commits.has(commit.sha)) commits.set(commit.sha, {
+                        sha: commit.sha, message: commit.commit.message.split("\n")[0], url: commit.html_url, date,
+                    });
+                }
+            }
+        }));
+        const result = [...commits.values()];
+        cache = { until: Date.now() + 3600_000, commits: result };
+        return result;
+    })();
+    try { return await pending; } finally { pending = undefined; }
 }
 
-/**
- * Lists the owner's tangled repos and the knot each lives on. The repo's own
- * DID (not the owner handle) is what the knot's log endpoint keys on.
- */
-async function listRepos(): Promise<RepoRef[]> {
-    const res = await fetch(
-        `${PDS}/xrpc/com.atproto.repo.listRecords?repo=${DID}&collection=sh.tangled.repo&limit=100`,
-        { signal: AbortSignal.timeout(5000) },
-    );
-    const { records } = await res.json();
-    if (!Array.isArray(records)) return [];
-
-    return records
-        .map((r: any) => ({ repoDid: r.value?.repoDid, knot: r.value?.knot }))
-        .filter((r): r is RepoRef => Boolean(r.repoDid && r.knot));
-}
-
-/**
- * Pulls the full commit log for a single repo from its knot.
- *
- * NOTE: sh.tangled.repo.log is an undocumented knot XRPC endpoint, so the shape
- * could change without notice. Callers must tolerate this throwing/returning [].
- * Omitting `ref` lets the knot pick the repo's default branch (main vs master).
- */
-async function fetchRepoCommitDates({ repoDid, knot }: RepoRef): Promise<Date[]> {
-    const res = await fetch(`https://${knot}/xrpc/sh.tangled.repo.log?repo=${repoDid}&per_page=1000`, { signal: AbortSignal.timeout(5000) });
-    const data = await res.json();
-    if (!Array.isArray(data?.commits)) return [];
-
-    return data.commits.map((c: any) => new Date(c?.author?.When)).filter((d: Date) => !Number.isNaN(d.getTime()));
-}
-
-function dayKey(date: Date): string {
-    return date.toISOString().slice(0, 10);
-}
-
-/**
- * Aggregates every commit across all repos into a per-day count for the
- * trailing 53 weeks (enough to fill a GitHub-style heatmap grid). Fails soft:
- * a repo whose knot errors is simply skipped.
- */
 export async function fetchCommitGraph(): Promise<CommitGraph> {
-    const repos = await listRepos();
-
-    const results = await Promise.allSettled(repos.map(fetchRepoCommitDates));
-
-    const cutoff = new Date();
-    cutoff.setUTCDate(cutoff.getUTCDate() - 53 * 7);
-
+    const commits = await fetchGitHubCommits();
     const counts: Record<string, number> = {};
-    let total = 0;
-
-    for (const result of results) {
-        if (result.status !== "fulfilled") continue;
-        for (const date of result.value) {
-            if (date < cutoff) continue;
-            const key = dayKey(date);
-            counts[key] = (counts[key] ?? 0) + 1;
-            total++;
-        }
+    for (const commit of commits) {
+        const day = new Date(commit.date).toISOString().slice(0, 10);
+        counts[day] = (counts[day] ?? 0) + 1;
     }
-
-    return { counts, total };
+    return { counts, total: commits.length };
 }

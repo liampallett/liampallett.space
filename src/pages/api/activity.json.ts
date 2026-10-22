@@ -1,16 +1,16 @@
 import { fetchBskyPosts, fetchBlogPosts } from "../../lib/atproto";
-import { fetchTangled } from "../../lib/tangled";
+import { fetchGitHub } from "../../lib/github";
 import { fetchInstagram } from "../../lib/instagram";
 import { fetchLinkedIn } from "../../lib/linkedin";
 
 export const prerender = false;
 
 export async function GET() {
-    const [bsky, blog, tangled, instagram, stories, linkedin] = await Promise.allSettled([
-        fetchBskyPosts(), fetchBlogPosts(), fetchTangled(), fetchInstagram(), fetchInstagram(true), fetchLinkedIn(),
+    const [bsky, blog, github, instagram, stories, linkedin] = await Promise.allSettled([
+        fetchBskyPosts(), fetchBlogPosts(), fetchGitHub(), fetchInstagram(), fetchInstagram(true), fetchLinkedIn(),
     ]);
 
-    return new Response(JSON.stringify({ bsky, blog, tangled, instagram, stories, linkedin }, null, 2), {
+    return new Response(JSON.stringify({ bsky, blog, github, instagram, stories, linkedin }, null, 2), {
         headers: { "Content-Type": "application/json" },
     });
 }

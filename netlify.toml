@@ -19,3 +19,10 @@
   #  publish = "dist" # Folder with the static content for _redirect file
 
   ## more info on configuring this file: https://ntl.fyi/file-based-build-config
+
+# Preserve existing CV links.
+[[redirects]]
+  from = "/Liam Pallett CV.pdf"
+  to = "/cv.pdf"
+  status = 301
+  force = true

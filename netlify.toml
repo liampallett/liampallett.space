@@ -26,3 +26,18 @@
   to = "/cv.pdf"
   status = 301
   force = true
+
+# Open the public master CV directly and revalidate it after updates.
+[[headers]]
+  for = "/cv.pdf"
+  [headers.values]
+    Content-Type = "application/pdf"
+    Content-Disposition = "inline; filename=\"Liam Pallett Master CV.pdf\""
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/Liam Pallett CV.pdf"
+  [headers.values]
+    Content-Type = "application/pdf"
+    Content-Disposition = "inline; filename=\"Liam Pallett Master CV.pdf\""
+    Cache-Control = "public, max-age=0, must-revalidate"

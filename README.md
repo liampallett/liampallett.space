@@ -98,3 +98,7 @@ Set an optional server-only `GITHUB_TOKEN` in Netlify with Functions scope for a
 GitHub results are cached for an hour per function instance. Upstream failures do not produce a partial commit total; the graph shows its error state. PR and repository creation activity comes from GitHub's recent public events, while commit messages come from the same commit data as the graph.
 
 Netlify deploys directly from the GitHub repository's `main` branch. The obsolete Tangled webhook workflow has been removed.
+
+## Public master CV
+
+The header labels the download “master CV” to identify the full record of projects, experience and activities. It downloads `/cv.pdf`, built from the private `liampallett/cv` repository with `sh build-public.sh`. Copy `build/public/cv.pdf` into `public/cv.pdf` and `public/Liam Pallett CV.pdf` (the legacy URL) when updating it. Use this public build, which omits the phone number; do not publish `master.pdf` or application variants. The link opens the PDF directly, with cache revalidation so visitors receive the latest deployed copy. Updates are copied explicitly, not synced automatically.

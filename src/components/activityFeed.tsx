@@ -52,11 +52,14 @@ export default function ActivityFeed() {
                 const all = [
                     ...(data.bsky.status === "fulfilled" ? data.bsky.value : []),
                     ...(data.blog.status === "fulfilled" ? data.blog.value : []),
-                    ...(data.github.status === "fulfilled" ? data.github.value : []),
+                    ...(data.github?.status === "fulfilled" ? data.github.value : []),
                     ...(data.instagram?.status === "fulfilled" ? data.instagram.value : []),
                     ...(data.stories?.status === "fulfilled" ? data.stories.value : []),
                     ...(data.linkedin?.status === "fulfilled" ? data.linkedin.value : []),
                 ]
+                    .filter((item: any) => item.url && Number.isFinite(Date.parse(item.date)) &&
+                        (!item.expiresAt || Date.parse(item.expiresAt) > Date.now()))
+                    .filter((item: any, index: number, all: any[]) => all.findIndex((other) => other.url === item.url) === index)
                     .map((item: any) => ({ ...item, date: new Date(item.date) }))
                     .sort((a: any, b: any) => b.date - a.date)
                     .slice(0, 8);

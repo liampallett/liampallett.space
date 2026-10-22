@@ -3,6 +3,12 @@ import type { ActivityItem } from "./activity";
 export const GITHUB_USER = "liampallett";
 const API = "https://api.github.com";
 
+export class GitHubRequestError extends Error {
+    constructor(public status: number) {
+        super(`GitHub request failed (HTTP ${status})`);
+    }
+}
+
 export async function githubRequest<T>(path: string): Promise<{ data: T; next: boolean }> {
     const token = process.env.GITHUB_TOKEN || import.meta.env?.GITHUB_TOKEN;
     const response = await fetch(`${API}${path}`, {
@@ -14,7 +20,7 @@ export async function githubRequest<T>(path: string): Promise<{ data: T; next: b
         },
         signal: AbortSignal.timeout(10_000),
     });
-    if (!response.ok) throw new Error(`GitHub request failed (HTTP ${response.status})`);
+    if (!response.ok) throw new GitHubRequestError(response.status);
     return { data: await response.json(), next: /rel="next"/.test(response.headers.get("link") ?? "") };
 }
 
@@ -35,7 +41,8 @@ type Event = {
     payload: {
         ref_type?: string;
         action?: string;
-        pull_request?: { title: string; html_url: string };
+        number?: number;
+        pull_request?: { number?: number; title?: string; html_url?: string };
     };
 };
 
@@ -47,14 +54,29 @@ export async function fetchGitHub(): Promise<ActivityItem[]> {
     if (pending) return pending;
     pending = (async () => {
         // Explicitly public even when authenticated: never publish private activity.
-        const { data } = await githubRequest<Event[]>(`/users/${GITHUB_USER}/events/public?per_page=100`);
+        const { fetchGitHubCommits } = await import("./commits");
+        const [events, commitResult] = await Promise.allSettled([
+            githubRequest<Event[]>(`/users/${GITHUB_USER}/events/public?per_page=100`),
+            fetchGitHubCommits(),
+        ]);
+        if (events.status === "rejected" && commitResult.status === "rejected") {
+            throw new Error("GitHub activity unavailable");
+        }
+        const data = events.status === "fulfilled" ? events.value.data : [];
         const items: ActivityItem[] = data.flatMap((event): ActivityItem[] => {
             const date = new Date(event.created_at);
             if (!Number.isFinite(date.getTime())) return [];
             const url = `https://github.com/${event.repo.name}`;
             if (event.type === "PullRequestEvent" && event.payload.pull_request) {
                 const pr = event.payload.pull_request;
-                return [{ type: "github", action: "pr", text: `${event.payload.action} PR: ${pr.title}`, url: pr.html_url, date }];
+                const number = event.payload.number ?? pr.number;
+                if (typeof number !== "number" || !Number.isSafeInteger(number) || number <= 0) return [];
+                const title = pr.title || `${event.repo.name} #${number}`;
+                return [{
+                    type: "github", action: "pr",
+                    text: `${event.payload.action || "updated"} PR: ${title}`,
+                    url: pr.html_url || `${url}/pull/${number}`, date,
+                }];
             }
             if (event.type === "CreateEvent" && event.payload.ref_type === "repository") {
                 return [{ type: "github", action: "repo", text: `created ${event.repo.name}`, url, date }];
@@ -62,8 +84,7 @@ export async function fetchGitHub(): Promise<ActivityItem[]> {
             return [];
         });
         // Commit messages come from the commits API, independent of PushEvent payload changes.
-        const { fetchGitHubCommits } = await import("./commits");
-        const commits = await fetchGitHubCommits();
+        const commits = commitResult.status === "fulfilled" ? commitResult.value : [];
         items.push(...commits.map((commit): ActivityItem => ({
             type: "github", action: "commit", text: commit.message, url: commit.url, date: new Date(commit.date),
         })));
@@ -73,7 +94,9 @@ export async function fetchGitHub(): Promise<ActivityItem[]> {
             seen.add(item.url);
             return true;
         }).slice(0, 20);
-        cache = { until: Date.now() + 3600_000, items: unique };
+        // Retry a failed sub-source soon instead of caching incomplete activity for an hour.
+        const ttl = events.status === "fulfilled" && commitResult.status === "fulfilled" ? 3600_000 : 60_000;
+        cache = { until: Date.now() + ttl, items: unique };
         return unique;
     })();
     try { return await pending; } finally { pending = undefined; }

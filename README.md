@@ -95,7 +95,9 @@ Project links and coding activity use `liampallett` on GitHub. The graph counts 
 
 Set an optional server-only `GITHUB_TOKEN` in Netlify with Functions scope for a higher API rate limit, then redeploy. Public read access is sufficient; no private repository permissions are needed. Without a token, GitHub's shared anonymous rate limit may be exhausted. Never use a `PUBLIC_` variable for the token. For local development, put it in the gitignored `.env`.
 
-GitHub results are cached for an hour per function instance. Upstream failures do not produce a partial commit total; the graph shows its error state. PR and repository creation activity comes from GitHub's recent public events, while commit messages come from the same commit data as the graph.
+GitHub results are cached for an hour per function instance. Upstream failures do not produce a partial commit total; the graph shows its error state. PR and repository creation activity comes from GitHub's recent public events, while commit messages come from the same commit data as the graph. PR entries fall back to the repository name and PR number when events omit titles. Events and commit activity fail independently; incomplete activity is retried after one minute. Repository size metadata is not used to decide whether a repository has commits.
+
+Run `node --test tests/github.test.mjs` for the GitHub widget regression checks (mocked responses; no credentials or network required).
 
 Netlify deploys directly from the GitHub repository's `main` branch. The obsolete Tangled webhook workflow has been removed.
 

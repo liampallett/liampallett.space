@@ -16,9 +16,9 @@ export async function GET() {
         headers: {
             "Content-Type": "application/json",
             // Live, but amortise the GitHub API calls: serve cached for an
-            // hour, then keep serving stale for a day while revalidating.
+            // hour, then keep serving stale for an hour while revalidating.
             "Cache-Control": "public, max-age=0, must-revalidate",
-            "Netlify-CDN-Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
+            "Netlify-CDN-Cache-Control": "public, s-maxage=3600, stale-while-revalidate=3600",
         },
     });
 }

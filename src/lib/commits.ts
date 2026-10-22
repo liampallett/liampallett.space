@@ -1,11 +1,11 @@
-import { GITHUB_USER, githubPages } from "./github";
+import { GITHUB_USER, GitHubRequestError, githubPages } from "./github";
 
 export interface CommitGraph {
     counts: Record<string, number>;
     total: number;
 }
 
-interface Repo { full_name: string; size: number; private: boolean }
+interface Repo { full_name: string; private: boolean }
 interface Commit {
     sha: string;
     html_url: string;
@@ -27,11 +27,20 @@ export async function fetchGitHubCommits(): Promise<PublicCommit[]> {
         since.setUTCHours(0, 0, 0, 0);
         const commits = new Map<string, PublicCommit>();
         // Limit concurrency; an upstream failure must not become a misleading partial graph.
-        const queue = repos.filter((repo) => !repo.private && repo.size > 0);
+        const queue = repos.filter((repo) => !repo.private);
         await Promise.all(Array.from({ length: Math.min(3, queue.length) }, async () => {
             for (let repo = queue.shift(); repo; repo = queue.shift()) {
                 const path = `/repos/${repo.full_name}/commits?author=${GITHUB_USER}&since=${encodeURIComponent(since.toISOString())}`;
-                for (const commit of await githubPages<Commit>(path)) {
+                let repoCommits: Commit[];
+                try {
+                    // Repository size metadata can be zero after an import even with commits.
+                    repoCommits = await githubPages<Commit>(path);
+                } catch (error) {
+                    // The commits endpoint returns 409 for repositories with no Git history.
+                    if (error instanceof GitHubRequestError && error.status === 409) continue;
+                    throw error;
+                }
+                for (const commit of repoCommits) {
                     const date = commit.commit.author?.date;
                     if (!date || !Number.isFinite(Date.parse(date)) || Date.parse(date) < since.getTime() || Date.parse(date) > Date.now()) continue;
                     if (!commits.has(commit.sha)) commits.set(commit.sha, {
